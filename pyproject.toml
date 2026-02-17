@@ -1,0 +1,48 @@
+[project]
+name = "datafarm"
+version = "0.1.0"
+description = "Schema-aware test data generation tool"
+authors = [{ name = "Data Farm Community" }]
+requires-python = ">=3.10"
+
+[project.scripts]
+dfarm = "data_farm.main:main"
+
+[tool.black]
+line-length = 125
+
+[tool.ruff]
+line-length = 125
+fix = true
+
+[tool.ruff.lint]
+# Pick a strong-but-not-insane default set
+select = [
+  "E", "F",   # pycodestyle + pyflakes (basic correctness)
+  "I",        # import sorting
+  "B",        # bugbear (common footguns)
+  "C4",       # comprehensions
+  "UP",       # pyupgrade
+  "SIM",      # simplifications
+  "PL"        # pylint-ish rules (bigger net)
+]
+ignore = [
+  "E203"      # common Black compatibility quirk
+]
+
+[tool.ruff.lint.mccabe]
+# Complexity cap (like ESLint "complexity": 5)
+max-complexity = 5
+
+[tool.ruff.lint.pylint]
+# Function size-ish guardrails
+max-args = 10
+max-branches = 10
+max-returns = 10
+max-statements = 15
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["src"]

@@ -1,0 +1,12 @@
+# Data Source Config
+[random]
+seed = "example-demo-v0.1.0"
+
+[data_source]
+source_type = "database"
+driver = "postgresql+psycopg"
+user_env = "SANDBOX_USER"
+password_env = "SANDBOX_PASS"
+host = "localhost"
+port = 5432
+database = "sandbox"
