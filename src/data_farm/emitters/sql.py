@@ -10,9 +10,10 @@ from data_farm.utils.enums import SqlType
 class SqlEmitter(Emitter):
     """TBD"""
 
+    # ruff: noqa: PLR0915
     def emit(self, table: str, emit_defs: list[ColumnEmitDefinition]) -> Iterable[str]:
-        col_parts = []
-        val_parts = []
+        col_parts: list[str] = []
+        val_parts: list[str] = []
 
         for ed in emit_defs:
             col_parts.append(ed.name)
