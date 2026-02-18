@@ -168,23 +168,33 @@ class DatabaseInspector(Inspector):
     def _normalize_type(self, type_raw: str) -> NormalizedColumnType:
         """Normalize SQL data types into domain type."""
 
+        name: SqlType | None = None
+        params: list[int] | None = None
+
         if not type_raw.strip():
             raise ValueError(f"Cannot normalize type {type_raw}.")
         name = self._get_type_name(type_raw)
         if not name:
             raise ValueError(f"Cannot normalize type {type_raw}.")
         params = self._get_type_params(type_raw)
+
+        return self.normalize_params(params, name)
+
+    def normalize_params(self, params: list[int] | None, name: SqlType) -> NormalizedColumnType:
         length = None
         num_precision = None
         scale = None
         time_precision = None
+
+        PRECISION_AND_SCALE = 2
+
         if not params:
             return NormalizedColumnType(name, None, None, None, None)
         if len(params) == 1 and name in (SqlType.STRING, SqlType.FIXED_STRING):
             length = params[0]
         elif len(params) == 1 and name in (SqlType.DECIMAL):
             num_precision = params[0]
-        elif len(params) == 2 and name in (SqlType.DECIMAL):
+        elif len(params) == PRECISION_AND_SCALE and name in (SqlType.DECIMAL):
             num_precision = params[0]
             scale = params[1]
         elif len(params) == 1 and name == SqlType.DATETIME:

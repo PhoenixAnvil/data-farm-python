@@ -3,7 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from data_farm.messages.messages import msg
+from data_farm.planners.boolean_planner import BooleanPlanner
+from data_farm.planners.int_planner import IntPlanner
+from data_farm.planners.numeric_planner import NumericPlanner
 from data_farm.planners.protocols import ColumnPlanner
+from data_farm.planners.string_planner import StringPlanner
 
 
 @dataclass(slots=True)
@@ -30,10 +34,6 @@ class PlannerRegistry:
     @classmethod
     def default(cls) -> PlannerRegistry:
         reg = cls.empty()
-        from data_farm.planners.boolean_planner import BooleanPlanner
-        from data_farm.planners.int_planner import IntPlanner
-        from data_farm.planners.numeric_planner import NumericPlanner
-        from data_farm.planners.string_planner import StringPlanner
 
         reg.register(StringPlanner(), "string_short", "email")  # email uses StringPlanner for now
         reg.register(IntPlanner(), "int_age", "int_count")

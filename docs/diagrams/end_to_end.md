@@ -1,3 +1,5 @@
+# End-to-End Diagram
+
 ```mermaid
 flowchart TD
     A[CLI Command inspect plan generate] --> B[Inspector Factory]
