@@ -1,6 +1,7 @@
 import logging
 import sys
 from pathlib import Path
+from typing import TextIO
 
 
 def setup_logging(verbosity: int = 0, log_file: str | None = None) -> None:
@@ -13,12 +14,7 @@ def setup_logging(verbosity: int = 0, log_file: str | None = None) -> None:
         2+ = DEBUG
     """
 
-    if verbosity >= 2:
-        level = logging.DEBUG
-    elif verbosity == 1:
-        level = logging.INFO
-    else:
-        level = logging.WARNING
+    level = set_level(verbosity)
 
     # Root logger
     root_logger = logging.getLogger()
@@ -30,17 +26,37 @@ def setup_logging(verbosity: int = 0, log_file: str | None = None) -> None:
     formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
 
     # Console handler → stderr (Unix convention)
-    console_handler = logging.StreamHandler(sys.stderr)
-    console_handler.setLevel(level)
-    console_handler.setFormatter(formatter)
-    root_logger.addHandler(console_handler)
+    root_logger.addHandler(setup_console_logger(level, formatter))
 
     # Optional file handler
     if log_file:
-        log_path = Path(log_file)
-        log_path.parent.mkdir(parents=True, exist_ok=True)
+        root_logger.addHandler(setup_file_logger(log_file, formatter))
 
-        file_handler = logging.FileHandler(log_path, encoding="utf-8")
-        file_handler.setLevel(logging.DEBUG)  # file always captures full detail
-        file_handler.setFormatter(formatter)
-        root_logger.addHandler(file_handler)
+
+def setup_console_logger(level: int, formatter: logging.Formatter) -> logging.StreamHandler[TextIO]:
+    console_handler: logging.StreamHandler[TextIO] = logging.StreamHandler(sys.stderr)
+    console_handler.setLevel(level)
+    console_handler.setFormatter(formatter)
+    return console_handler
+
+
+def setup_file_logger(log_file: str, formatter: logging.Formatter) -> logging.FileHandler:
+    log_path = Path(log_file)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+
+    file_handler = logging.FileHandler(log_path, encoding="utf-8")
+    file_handler.setLevel(logging.DEBUG)  # file always captures full detail
+    file_handler.setFormatter(formatter)
+    return file_handler
+
+
+def set_level(verbosity: int) -> int:
+    INFO = 1
+    DEBUG = 2
+
+    if verbosity >= DEBUG:
+        return logging.DEBUG
+    elif verbosity == INFO:
+        return logging.INFO
+    else:
+        return logging.WARNING

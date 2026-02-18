@@ -1,5 +1,6 @@
 from typing import Final
 
+# ruff: noqa: E501
 MESSAGES: Final[dict[str, str]] = {
     # Errors
     "err.planner.not_found": "Planner could not be found for column {column} of type {sql_type} in table {table} and strategy {strategy}.",

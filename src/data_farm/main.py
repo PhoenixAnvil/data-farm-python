@@ -1,6 +1,5 @@
 import sys
 
-from data_farm.app.logging_config import setup_logging
 from data_farm.cli.base import build_parser
 from data_farm.cli.cli_dispatch import dispatch
 
