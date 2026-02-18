@@ -1,3 +1,5 @@
+# Component Diagram
+
 ```mermaid
 flowchart LR
     subgraph CLI[CLI Layer]

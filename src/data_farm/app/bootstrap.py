@@ -29,11 +29,7 @@ def boot_app_from_ns(ns: Namespace) -> AppContext:
     seed = getattr(ns, "seed", None)
     dcd = data_farm_config
 
-    if not config_dir_exists(cr):
-        make_data_farm_config_dir(cr)
-
-    if not data_dir_exists(dr):
-        make_data_farm_data_dir(dr)
+    validate_app_dirs(cr, dr)
 
     if not app_config_file_exists(cp):
         store_data_farm_config(cp, dcd)
@@ -58,3 +54,11 @@ def boot_app_from_ns(ns: Namespace) -> AppContext:
         logs_dir=logs_dir,
         debug=debug,
     )
+
+
+def validate_app_dirs(app_config_root: str, app_data_root: str) -> None:
+    if not config_dir_exists(app_config_root):
+        make_data_farm_config_dir(app_config_root)
+
+    if not data_dir_exists(app_data_root):
+        make_data_farm_data_dir(app_data_root)

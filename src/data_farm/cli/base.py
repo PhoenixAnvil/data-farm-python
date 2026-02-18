@@ -13,6 +13,7 @@ from typing import Any, Protocol
 from data_farm.messages.messages import msg
 
 
+# ruff: noqa: PLR0915
 def build_parser() -> argparse.ArgumentParser:
     """
     Create and return the dfarm CLI parser.
