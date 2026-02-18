@@ -1,8 +1,8 @@
 # data_farm/suggestors/model.py
 from __future__ import annotations
 
-from dataclasses import dataclass
 import random
+from dataclasses import dataclass
 from typing import Any
 
 from data_farm.utils.enums import SqlType
@@ -60,7 +60,7 @@ class ColumnEmitDefinition:
 
     name: str
     data_type: SqlType
-    value: str
+    value: Any
 
 
 @dataclass(frozen=True, slots=True)

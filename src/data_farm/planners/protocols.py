@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from data_farm.emitters.sql import ColumnEmitDefinition
 from data_farm.models.models import (
+    ColumnEmitDefinition,
     ColumnInspection,  # adjust import
     PatternSuggestion,  # adjust import
 )
