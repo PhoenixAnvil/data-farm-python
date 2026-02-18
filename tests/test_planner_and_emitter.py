@@ -26,11 +26,11 @@ def test_string_planner_uses_pattern_id_when_present(plan_context, col_first_nam
 
 def test_sql_emitter_quotes_string_values() -> None:
     e = SqlEmitter()
-    sql = e.emit(
+    for insert in e.emit(
         "t1",
         [
             ColumnEmitDefinition(name="first_name", data_type=SqlType.STRING, value="Alice"),
             ColumnEmitDefinition(name="age", data_type=SqlType.INTEGER, value="42"),
         ],
-    )
-    assert sql == "INSERT INTO t1 (first_name, age) VALUES ('Alice', 42);"
+    ):
+        assert insert == "INSERT INTO t1 (first_name, age) VALUES ('Alice', 42);"
