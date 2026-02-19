@@ -223,6 +223,8 @@ class DatabaseInspector(Inspector):
             return SqlType.DATETIME
         elif name.startswith("BOOLEAN"):
             return SqlType.BOOLEAN
+        elif name.startswith("UUID"):
+            return SqlType.UUID
 
     def _has_params(self, type_name: str) -> bool:
         """
