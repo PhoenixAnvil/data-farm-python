@@ -36,6 +36,7 @@ MESSAGES: Final[dict[str, str]] = {
     "cli.help.insp.table": "The database table to generate data for",
     "cli.help.insp.rows": "Number of rows to generate per table",
     "cli.help.insp.out": "Emit INSERT statements to file",
+    "cli.help.insp.schema": "The schema containing the tables to generate data for",
     "cli.help.rng": "Manage the random number generator",
     "cli.help.rng.seed": "Provide a seed value for the random number generator",
 }

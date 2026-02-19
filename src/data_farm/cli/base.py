@@ -63,6 +63,7 @@ def build_parser() -> argparse.ArgumentParser:
     inspect.add_argument("-t", "--table", required=False, help=msg("cli.help.insp.table"))
     inspect.add_argument("-r", "--rows", required=False, help=msg("cli.help.insp.rows"))
     inspect.add_argument("-o", "--output-file", required=False, help=msg("cli.help.insp.out"))
+    inspect.add_argument("-m", "--schema", required=False, help=msg("cli.help.insp.schema"))
 
     rng = subparsers.add_parser("rng", help=msg("cli.help.rng"))
     rng.add_argument("-s", "--seed", required=True, help=msg("cli.help.rng.seed"))
@@ -106,6 +107,7 @@ class InspectNamespace(Protocol):
     rows: int
     output_file: str
     logs_dir: str
+    schema: str
 
 
 class ProjectNamespace(Protocol):
