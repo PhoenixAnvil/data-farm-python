@@ -16,10 +16,12 @@ def dispatch(ns: Namespace) -> None:
     ctx = boot_app_from_ns(ns)
 
     log_file = ns.log_file
-    if Path(log_file) == Path("."):
-        log_file = generate_log_file_name()
+    if log_file is not None:
+        log_file = Path(log_file)
+        if log_file == Path("."):
+            log_file = generate_log_file_name()
+        setup_logging(verbosity=ns.verbose, log_file=str(log_file))
 
-    setup_logging(verbosity=ns.verbose, log_file=log_file)
     if ns.command == "project":
         pns = cast(ProjectNamespace, ns)
         handle_project(ctx, pns)
