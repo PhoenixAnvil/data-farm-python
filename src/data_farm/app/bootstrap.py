@@ -3,7 +3,9 @@ from __future__ import annotations
 from argparse import Namespace
 from pathlib import Path
 
+from data_farm.app.logging_config import setup_logging
 from data_farm.cli.base import AppContext
+from data_farm.logging.logging import generate_log_file_name
 from data_farm.utils.config import (
     app_config_file_exists,
     config_dir_exists,
@@ -42,6 +44,8 @@ def boot_app_from_ns(ns: Namespace) -> AppContext:
 
     debug = getattr(ns, "debug", False)
 
+    setup_logger(ns)
+
     return AppContext(
         config_dir=cr,
         data_dir=dr,
@@ -62,3 +66,12 @@ def validate_app_dirs(app_config_root: str, app_data_root: str) -> None:
 
     if not data_dir_exists(app_data_root):
         make_data_farm_data_dir(app_data_root)
+
+
+def setup_logger(ns: Namespace) -> None:
+    log_file = ns.log_file
+    if log_file is not None:
+        log_file = Path(log_file)
+        if log_file == Path("."):
+            log_file = generate_log_file_name()
+        setup_logging(verbosity=ns.verbose, log_file=str(log_file))
