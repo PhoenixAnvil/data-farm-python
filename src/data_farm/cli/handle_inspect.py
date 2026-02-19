@@ -25,7 +25,7 @@ from data_farm.utils.config import load_data_source_config
 def handle_inspect(app_ctx: AppContext, ns: InspectNamespace):
     """Process a data source inspection request."""
     insp_ctx = create_inspection_context(app_ctx, ns)
-    insp_res = inspect(insp_ctx.data_source_config)
+    insp_res = inspect(insp_ctx.data_source_config, insp_ctx.schema)
 
     gen_plans: dict[tuple[str, str], GenerationPlan] = get_generation_plans(insp_ctx, insp_res)
 
@@ -51,6 +51,7 @@ class InspectionContext:
     emitter: Emitter
     data_source_config: list[dict[str, Any]]
     rows_per_table: int
+    schema: str
 
 
 def create_inspection_context(app_ctx: AppContext, ns: InspectNamespace) -> InspectionContext:
@@ -71,6 +72,8 @@ def create_inspection_context(app_ctx: AppContext, ns: InspectNamespace) -> Insp
     patterns_dir = project_dir / "patterns"
     plan_ctx = PlanContext(rng=rng, patterns=PatternRegistry(patterns_dir), rows_per_table=rows_per_table)
 
+    schema = ns.schema
+
     return InspectionContext(
         plan_context=plan_ctx,
         suggestors=all_suggestors,
@@ -78,13 +81,14 @@ def create_inspection_context(app_ctx: AppContext, ns: InspectNamespace) -> Insp
         emitter=sql_emitter,
         data_source_config=ds_config,
         rows_per_table=rows_per_table,
+        schema=schema,
     )
 
 
-def inspect(data_source_config: list[dict[str, Any]]) -> list[TableInspection]:
+def inspect(data_source_config: list[dict[str, Any]], schema: str) -> list[TableInspection]:
     with create_inspector(data_source_config[0]) as insp:
         db = cast(RelationalInspector, insp)
-        return db.inspect_all_tables()
+        return db.inspect_all_tables(schema=schema)
 
 
 def get_generation_plans(

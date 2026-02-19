@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from sqlalchemy import inspect, text
+from sqlalchemy import MetaData, Table, func, inspect, select, text
 from sqlalchemy.engine import Connection, Engine
 from sqlalchemy.engine.interfaces import ReflectedColumn
 from sqlalchemy.engine.reflection import Inspector as SAInspector
@@ -24,6 +24,7 @@ class DatabaseInspector(Inspector):
         super().__init__(config)
         self.engine: Engine | None = None
         self.conn: Connection | None = None
+        self.err_no_conn: str = "err.dbinspector.not_conn"
 
     def connect(self) -> None:
         try:
@@ -46,30 +47,47 @@ class DatabaseInspector(Inspector):
 
     def query(self, expression: str) -> list[dict[str, Any]]:
         if self.conn is None:
-            raise RuntimeError(msg("err.dbinspector.not_conn"))
+            raise RuntimeError(msg(self.err_no_conn))
 
         result = self.conn.execute(text(expression))
         # Convert RowMapping -> plain dict (keeps SQLAlchemy out of downstream code)
         return [dict(row) for row in result.mappings().all()]
+
+    def row_count(self, count_table: str, schema: str | None = None) -> int:
+        if self.conn is None:
+            raise RuntimeError(msg(self.err_no_conn))
+
+        metadata = MetaData()
+
+        t = Table(
+            count_table,
+            metadata,
+            autoload_with=self.engine,
+            schema=schema,
+        )
+
+        stmt = select(func.count()).select_from(t)
+        return int(self.conn.execute(stmt).scalar_one())
 
     def inspect_table(self, table: str, *, schema: str | None = None) -> TableInspection:
         """
         Inspect a table's columns' metadata.
         """
         col_meta = self._get_columns(table, schema=schema)
-        rows = self.query(f"SELECT * FROM {table};")
+        rows = self.row_count(table, schema) if schema else self.row_count(table)
+
         return TableInspection(
             table=table,
             schema=schema,
             columns=col_meta,
-            row_count=len(rows),
+            row_count=rows,
         )
 
     def inspect_many_tables(self, tables: list[str], schema: str | None = None) -> list[TableInspection]:
         all_tables = self._get_tables(schema=schema)
-        for table in tables:
-            if table not in all_tables:
-                raise ValueError(msg("err.dbinspector.tbl_no_exist", table=table))
+        for tbl in tables:
+            if tbl not in all_tables:
+                raise ValueError(msg("err.dbinspector.tbl_no_exist", table=tbl))
 
         return [self.inspect_table(t, schema=schema) for t in tables]
 
@@ -79,7 +97,7 @@ class DatabaseInspector(Inspector):
 
     def _require_conn(self) -> Connection:
         if self.conn is None:
-            raise RuntimeError(msg("err.dbinspector.not_conn"))
+            raise RuntimeError(msg(self.err_no_conn))
         return self.conn
 
     def _sa_inspector(self) -> SAInspector:

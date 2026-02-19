@@ -38,6 +38,13 @@ class Inspector(ABC):
         pass
 
     @abstractmethod
+    def row_count(self, count_table: str) -> int:
+        """
+        Return a count of rows in the specified table.
+        """
+        ...
+
+    @abstractmethod
     def disconnect(self):
         """Disconnect from a database or close a file."""
         pass
