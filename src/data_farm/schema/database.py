@@ -243,6 +243,8 @@ class DatabaseInspector(Inspector):
             return SqlType.BOOLEAN
         elif name.startswith("UUID"):
             return SqlType.UUID
+        elif name.startswith("JSON"):
+            return SqlType.JSON
 
     def _has_params(self, type_name: str) -> bool:
         """

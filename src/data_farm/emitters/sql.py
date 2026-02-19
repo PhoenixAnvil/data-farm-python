@@ -23,6 +23,10 @@ def _format_bool(value: Any) -> str:
     return "true" if value else "false"
 
 
+def _format_json(value: str) -> str:
+    return f"'{value}'::jsonb"
+
+
 _FORMATTERS: dict[SqlType, Callable[[Any], str]] = {
     SqlType.STRING: lambda v: _quote_sql_string(str(v)),
     SqlType.UUID: lambda v: _quote_sql_string(str(v)),
@@ -32,6 +36,7 @@ _FORMATTERS: dict[SqlType, Callable[[Any], str]] = {
     SqlType.DECIMAL: lambda v: str(v),
     SqlType.DATE: lambda v: str(v),
     SqlType.DATETIME: lambda v: str(v),
+    SqlType.JSON: lambda v: str(_format_json(v)),
 }
 
 
