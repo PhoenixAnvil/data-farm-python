@@ -8,6 +8,7 @@ from data_farm.planners.int_planner import IntPlanner
 from data_farm.planners.numeric_planner import NumericPlanner
 from data_farm.planners.protocols import ColumnPlanner
 from data_farm.planners.string_planner import StringPlanner
+from data_farm.planners.uuid_planner import UUIDPlanner
 
 
 @dataclass(slots=True)
@@ -39,4 +40,5 @@ class PlannerRegistry:
         reg.register(IntPlanner(), "int_age", "int_count")
         reg.register(BooleanPlanner())
         reg.register(NumericPlanner())
+        reg.register(UUIDPlanner())
         return reg
