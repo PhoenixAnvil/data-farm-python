@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from data_farm.messages.messages import msg
 from data_farm.planners.boolean_planner import BooleanPlanner
 from data_farm.planners.int_planner import IntPlanner
+from data_farm.planners.jsonb_planner import JSONBPlanner
 from data_farm.planners.numeric_planner import NumericPlanner
 from data_farm.planners.protocols import ColumnPlanner
 from data_farm.planners.string_planner import StringPlanner
@@ -41,4 +42,5 @@ class PlannerRegistry:
         reg.register(BooleanPlanner())
         reg.register(NumericPlanner())
         reg.register(UUIDPlanner())
+        reg.register(JSONBPlanner())
         return reg
