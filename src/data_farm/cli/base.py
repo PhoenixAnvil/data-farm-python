@@ -64,6 +64,13 @@ def build_parser() -> argparse.ArgumentParser:
     inspect.add_argument("-r", "--rows", required=False, help=msg("cli.help.insp.rows"))
     inspect.add_argument("-o", "--output-file", required=False, help=msg("cli.help.insp.out"))
     inspect.add_argument("-m", "--schema", required=False, help=msg("cli.help.insp.schema"))
+    inspect.add_argument(
+        "--insert-batch-size",
+        required=False,
+        default=1,
+        type=int,
+        help="Rows per INSERT statement (1 = one INSERT per row).",
+    )
 
     rng = subparsers.add_parser("rng", help=msg("cli.help.rng"))
     rng.add_argument("-s", "--seed", required=True, help=msg("cli.help.rng.seed"))
@@ -108,6 +115,7 @@ class InspectNamespace(Protocol):
     output_file: str
     logs_dir: str
     schema: str
+    insert_batch_size: int
 
 
 class ProjectNamespace(Protocol):
