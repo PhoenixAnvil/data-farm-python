@@ -1,6 +1,9 @@
 # src/data_farm/planners/string_planner.py
 from __future__ import annotations
 
+from collections.abc import Callable
+from typing import Any
+
 from data_farm.field.text import TextFieldDefinition
 from data_farm.generators.text import TextGenerator
 from data_farm.models.models import ColumnEmitDefinition, ColumnInspection, PatternSuggestion
@@ -12,6 +15,33 @@ from data_farm.utils.enums import SqlType
 class StringPlanner:
     # Handles both fallback strategies
     strategy = "string"
+
+    def compile(
+        self,
+        column: ColumnInspection,
+        suggestion: PatternSuggestion,
+        ctx: PlanContext,
+    ) -> tuple[SqlType, Callable[[], Any | None]]:
+        """Compile a per-column generator to remove planning work from the hot row loop."""
+        pattern_id = suggestion.pattern_id or self._pattern_key_for_strategy(suggestion.strategy)
+        if pattern_id and ctx.patterns.exists(pattern_id):
+            pattern = ctx.patterns.get(pattern_id)
+        else:
+            pattern = Pattern(classification="general_string", choices=["A", "B", "C", "D", "E", "F"])
+
+        max_len = column.length
+        if max_len is not None and max_len <= 0:
+            max_len = None
+
+        field_def = TextFieldDefinition(
+            allow_null=column.nullable,
+            fixed_length=None,
+            min_length=0,
+            max_length=max_len,
+        )
+
+        gen = TextGenerator(ctx.rng, pattern, field_def)
+        return (SqlType.STRING, gen.generate)
 
     def plan(
         self,

@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Callable
 from decimal import Decimal
+from typing import Any
 
 from data_farm.emitters.sql import ColumnEmitDefinition
 from data_farm.field.text import TextFieldDefinition
@@ -18,6 +20,32 @@ from data_farm.utils.enums import SqlType
 
 class NumericPlanner:
     strategy = "decimal_amount"
+
+    def compile(
+        self,
+        column: ColumnInspection,
+        suggestion: PatternSuggestion,
+        ctx: PlanContext,
+    ) -> tuple[SqlType, Callable[[], Any | None]]:
+        """Compile a per-column generator to remove planning work from the hot row loop."""
+        pattern_key = self._pattern_key_for_strategy(suggestion.strategy)
+
+        if pattern_key and ctx.patterns.exists(pattern_key):
+            pattern = ctx.patterns.get(pattern_key)
+        else:
+            # Provide a small pool of numeric strings so repeated generation isn't constant.
+            choices = [str(self.generate_numeric(ctx.rng, 8, 3)) for _ in range(32)]
+            pattern = Pattern(classification="general_decimal", choices=choices)
+
+        field_def = TextFieldDefinition(
+            allow_null=column.nullable,
+            fixed_length=None,
+            min_length=0,
+            max_length=100,
+        )
+
+        gen = TextGenerator(ctx.rng, pattern, field_def)
+        return (SqlType.DECIMAL, gen.generate)
 
     def plan(
         self,
