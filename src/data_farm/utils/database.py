@@ -12,16 +12,10 @@ def build_conn_url(config: dict[str, Any]) -> URL:
     drivername = _require_str(config, "driver")
 
     user_env = _optional_str(config, "user_env")
-    if user_env:
-        username = os.environ.get(user_env)
-        if not username:
-            raise ValueError(f"Could not read username from environment {user_env}.")
+    username = get_user_from_env(user_env)
 
     password_env = _optional_str(config, "password_env")
-    if password_env:
-        password = os.environ.get(password_env)
-        if not password:
-            raise ValueError(f"Could not read password from environment {password_env}.")
+    password = get_password_from_env(password_env)
 
     host = _optional_str(config, "host")
     port = _optional_int(config, "port")
@@ -42,6 +36,28 @@ def build_conn_url(config: dict[str, Any]) -> URL:
         kwargs["query"] = query
 
     return URL.create(**kwargs)
+
+
+def get_user_from_env(username_env: str | None):
+    if username_env is not None:
+        username = os.environ.get(username_env)
+        if not username:
+            raise ValueError(f"Could not read username from environment {username_env}.")
+        else:
+            return username
+    else:
+        raise ValueError("username_env=None")
+
+
+def get_password_from_env(password_env: str | None):
+    if password_env is not None:
+        password = os.environ.get(password_env)
+        if not password:
+            raise ValueError(f"Could not read password from environment {password_env}.")
+        else:
+            return password
+    else:
+        raise ValueError("password_env=None")
 
 
 def create_db_engine(config: dict[str, Any]) -> Engine:
@@ -117,7 +133,7 @@ def _optional_query(config: dict[str, Any], key: str = "query") -> QueryMapping 
     query: dict[str, str] = {}
 
     for k, v in raw_dict.items():
-        if not isinstance(v, (str, int, float, bool)):
+        if not isinstance(v, str | int | float | bool):
             raise ValueError(f"Invalid query param '{k}': must be simple scalar.")
         query[k] = str(v)
 
