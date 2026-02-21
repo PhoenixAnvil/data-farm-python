@@ -36,9 +36,9 @@ _FORMATTERS: dict[SqlType, Callable[[Any], str]] = {
     SqlType.BOOLEAN: _format_bool,
     SqlType.INTEGER: lambda v: str(int(v)),
     SqlType.FLOAT: lambda v: str(float(v)),
-    SqlType.DECIMAL: lambda v: str(v),
-    SqlType.DATE: lambda v: str(v),
-    SqlType.DATETIME: lambda v: str(v),
+    SqlType.DECIMAL: str,
+    SqlType.DATE: str,
+    SqlType.DATETIME: str,
     SqlType.JSON: _format_jsonb,
 }
 
