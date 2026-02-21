@@ -4,6 +4,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 import pytest
+
 from data_farm.messages.messages import msg
 from data_farm.utils.path import FilePathValidator
 

@@ -1,12 +1,12 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.4   # Use latest stable at time of setup
+    rev: v0.15.2   # Use latest stable at time of setup
     hooks:
       - id: ruff
-        args: ["--fix"]
+        args: ["--fix", "--exit-non-zero-on-fix"]
 
   - repo: https://github.com/psf/black
-    rev: 24.4.2   # Use latest stable
+    rev: 26.1.0   # Use latest stable
     hooks:
       - id: black
 
