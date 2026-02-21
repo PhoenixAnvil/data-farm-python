@@ -4,7 +4,6 @@ import random
 from pathlib import Path
 
 import pytest
-
 from data_farm.models.models import ColumnInspection, NormalizedColumnType
 from data_farm.patterns.registry import PatternRegistry
 from data_farm.planners.context import PlanContext
@@ -69,3 +68,8 @@ def col_short_string() -> ColumnInspection:
         nullable=False,
         length=8,
     )
+
+
+pytest_plugins = [
+    "tests.helpers.factories",
+]
