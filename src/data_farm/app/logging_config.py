@@ -3,8 +3,12 @@ import sys
 from pathlib import Path
 from typing import TextIO
 
+from data_farm.logging.logging import IndentFormatter
 
-def setup_logging(verbosity: int = 0, log_file: str | None = None) -> None:
+LOGGER_NAME = "dfarm"
+
+
+def setup_logging(verbosity: int = 0, log_file: str | None = None, *, force: bool = False) -> None:
     """
     Configure application logging.
 
@@ -12,25 +16,34 @@ def setup_logging(verbosity: int = 0, log_file: str | None = None) -> None:
         0 = WARNING (default)
         1 = INFO
         2+ = DEBUG
-    """
 
+    force:
+        If True, replace existing handlers on the dfarm logger.
+        Useful for dev reruns; leave False for normal operation/testing.
+    """
     level = set_level(verbosity)
 
-    # Root logger
-    root_logger = logging.getLogger()
-    root_logger.setLevel(level)
+    logger = logging.getLogger(LOGGER_NAME)
+    logger.propagate = False  # don't double-log via root
 
-    # Clear any existing handlers (important if re-running in dev)
-    root_logger.handlers.clear()
+    # Key: allow everything through the logger;
+    # handlers decide what to output.
+    logger.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
+    if force:
+        logger.handlers.clear()
+    elif logger.handlers:
+        # already configured; don't duplicate handlers
+        return
 
-    # Console handler → stderr (Unix convention)
-    root_logger.addHandler(setup_console_logger(level, formatter))
+    console_formatter = IndentFormatter("%(asctime)s | %(levelname)-8s | %(message)s")
 
-    # Optional file handler
+    file_formatter = IndentFormatter("%(asctime)s | %(levelname)-8s | %(module)s:%(funcName)s:%(lineno)d | %(message)s")
+
+    logger.addHandler(setup_console_logger(level, console_formatter))
+
     if log_file:
-        root_logger.addHandler(setup_file_logger(log_file, formatter))
+        logger.addHandler(setup_file_logger(log_file, file_formatter))
 
 
 def setup_console_logger(level: int, formatter: logging.Formatter) -> logging.StreamHandler[TextIO]:
@@ -56,7 +69,6 @@ def set_level(verbosity: int) -> int:
 
     if verbosity >= DEBUG:
         return logging.DEBUG
-    elif verbosity == INFO:
+    if verbosity == INFO:
         return logging.INFO
-    else:
-        return logging.WARNING
+    return logging.WARNING
