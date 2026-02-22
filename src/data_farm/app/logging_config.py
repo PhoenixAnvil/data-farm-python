@@ -1,3 +1,33 @@
+"""
+Configure Data Farm's logging system.
+
+This module establishes logging behavior and conventions used
+throughout the application.
+
+Design principles:
+
+- Logging to a file occurs only when explicitly requested.
+- All console logging is written to standard error.
+- Standard output remains reserved for generated data, enabling
+  UNIX-style redirection and pipeline composition.
+
+Structured logging conventions:
+
+- Key operations are logged with Start (>>>) and Complete (<<<) markers.
+- Completion markers include total execution time.
+- Nested operations are indented to reflect call hierarchy.
+
+Log levels:
+
+- INFO: Start and completion of major operations.
+- WARNING: Recoverable or potentially problematic conditions.
+- DEBUG: Detailed diagnostic information for troubleshooting.
+
+This module does not perform application logic. It defines
+the logging contract and ensures consistent behavior across
+the system.
+"""
+
 import logging
 import sys
 from pathlib import Path

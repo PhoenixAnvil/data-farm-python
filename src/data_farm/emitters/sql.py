@@ -1,3 +1,16 @@
+"""
+Generate and return a SQL INSERT statement.
+
+This module generates a SQL INSERT statement based on a
+list of ``ColumnEmitDefinition``s. The INSERT statement
+is then returned to the calling layer.
+
+This module does not:
+- Generate the values included in the INSERT statement
+- Inspect the data source to obtain column metadata used
+  in value generation
+"""
+
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable

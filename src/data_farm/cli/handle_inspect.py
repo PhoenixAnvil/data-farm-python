@@ -1,3 +1,27 @@
+"""
+Execute a dispatched inspection request.
+
+This module orchestrates a data source inspection.
+
+- An Inspection Context is built
+- The data source is inspected returning column
+  metadata
+- Data generation plans are built based on the metadata
+- Data is then generated to console or file
+
+A data source inspection involves two key actions:
+- Interrogate the data source to know column metadata
+- Build a set of SQL statements or an input file for
+  a database platform based on column metadata
+
+An inspection calls on dedicated layers to fullfil
+each action. An inspection does not:
+
+- Directly implement *all* functionality required for
+  an inspection
+- Parse or dispatch command-line arguments.
+"""
+
 from __future__ import annotations
 
 import datetime

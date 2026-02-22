@@ -1,3 +1,16 @@
+"""
+Dispatch application functionality based on command-line arguments.
+
+This module accepts an ``argparse`` namespace containing parsed
+command-line arguments. Application functionality is then dispatched.
+
+This module does not:
+- Parse command-line arguments
+- Directly implement application functionality
+
+All application functionality is encapsulated behind dedicated layers.
+"""
+
 import logging
 from argparse import Namespace
 from typing import cast

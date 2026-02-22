@@ -1,3 +1,16 @@
+"""
+Dispatch Data Farm project-related requests.
+
+This module handles these requests:
+- Sets a new projects_root directory
+- Initializes a new Data Farm project
+
+This module does not:
+- Bootstrap the application
+- Parse or interpret command-line arguments
+- Dispatch a data source inspection
+"""
+
 from pathlib import Path
 
 import tomli_w

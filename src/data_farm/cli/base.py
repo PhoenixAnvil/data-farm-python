@@ -1,7 +1,16 @@
 """
-Command-line interface definition for dfarm.
+Define the command-line interface contract for Data Farm.
 
-This module defines the argparse parser and CLI contract for the tool.
+This module constructs and returns a configured ``argparse`` parser
+describing the supported commands and options.
+
+It defines the CLI surface of the application but does not:
+
+- Parse argument values into application state
+- Interpret configuration semantics
+- Dispatch execution or invoke pipeline stages
+
+Those responsibilities belong to the bootstrap and dispatch layers.
 """
 
 import argparse
