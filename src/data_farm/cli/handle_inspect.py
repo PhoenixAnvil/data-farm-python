@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import logging
 from collections.abc import Callable
 from contextlib import nullcontext
 from dataclasses import dataclass
@@ -9,6 +10,7 @@ from typing import Any, TextIO, cast
 
 from data_farm.cli.base import AppContext, InspectNamespace
 from data_farm.emitters.sql import format_values_fast, get_formatter
+from data_farm.logging.logging import timed
 from data_farm.models.models import TableInspection
 from data_farm.planners.context import PatternRegistry, PlanContext
 from data_farm.planners.generation_plan import GenerationPlan
@@ -21,18 +23,25 @@ from data_farm.suggestors.engine import suggest_for_column
 from data_farm.utils.config import load_data_source_config
 from data_farm.utils.enums import SqlType
 
+logger = logging.getLogger("dfarm")
+
 
 def handle_inspect(app_ctx: AppContext, ns: InspectNamespace) -> None:
     """Process a data source inspection request."""
 
-    insp_ctx = create_inspection_context(app_ctx, ns)
-    insp_res = inspect(insp_ctx.data_source_config, insp_ctx.schema)
+    with timed(logger, "Building Inspection Context"):
+        insp_ctx = create_inspection_context(app_ctx, ns)
 
-    gen_plans: dict[tuple[str, str], GenerationPlan] = get_generation_plans(insp_ctx, insp_res)
+    with timed(logger, "Inspecting"):
+        insp_res = inspect(insp_ctx.data_source_config, insp_ctx.schema)
+
+    with timed(logger, "Building data generation plans"):
+        gen_plans: dict[tuple[str, str], GenerationPlan] = get_generation_plans(insp_ctx, insp_res)
 
     out_path = Path(ns.output_file) if ns.output_file else None
 
-    generate_data(out_path, app_ctx, insp_ctx, insp_res, gen_plans)
+    with timed(logger, "Generating data"):
+        generate_data(out_path, app_ctx, insp_ctx, insp_res, gen_plans)
 
 
 def make_file_header(seed: str | int | None, rows_per_table: str) -> str:
@@ -76,6 +85,13 @@ def create_inspection_context(app_ctx: AppContext, ns: InspectNamespace) -> Insp
 
     batch_size = int(getattr(ns, "insert_batch_size", 1) or 1)
     batch_size = max(batch_size, 1)
+
+    logger.debug("Inspection Context: projects_root=%s", projects_root)
+    logger.debug("Inspection Context: project_dir=%s", project_dir)
+    logger.debug("Inspection Context: patterns_dir=%s", patterns_dir)
+    logger.debug("Inspection Context: rows_per_table=%d", rows_per_table)
+    logger.debug("Inspection Context: batch_size=%d", batch_size)
+    logger.debug("Inspection Context: schema=%s", schema)
 
     return InspectionContext(
         plan_context=plan_ctx,
