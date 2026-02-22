@@ -2,12 +2,12 @@ import contextvars
 import logging
 import time
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 
 def generate_log_file_name() -> str:
     """Generate a name for the Data Farm log file."""
-    return f"data_farm_{datetime.now(timezone.utc):%Y%m%d_%H%M%S}.log"
+    return f"data_farm_{datetime.now(UTC):%Y%m%d_%H%M%S}.log"
 
 
 @contextmanager
