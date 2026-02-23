@@ -19,6 +19,7 @@ Bootstrap does not:
 
 from __future__ import annotations
 
+import logging
 from argparse import Namespace
 from pathlib import Path
 
@@ -41,6 +42,8 @@ from data_farm.utils.config import (
 )
 from data_farm.utils.random import create_rng
 
+logger = logging.getLogger("dfarm")
+
 
 def boot_app_from_ns(ns: Namespace) -> AppContext:
     cr = ns.config_dir or data_farm_config_root
@@ -56,6 +59,8 @@ def boot_app_from_ns(ns: Namespace) -> AppContext:
         store_data_farm_config(cp, dcd)
 
     cd = load_data_farm_config(cp)
+
+    logger.info("Data Farm configuration loaded from: %s", cp)
 
     default_seed = "rng-global-default-seed-v0.1.0"
     seed_value = seed or (cd.get("seed", default_seed) if cd else default_seed)

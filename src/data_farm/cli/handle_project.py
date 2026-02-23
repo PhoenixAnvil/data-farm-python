@@ -5,6 +5,7 @@ listing. It is invoked by the CLI dispatch layer and uses the shared
 application context.
 """
 
+import logging
 from pathlib import Path
 
 import tomli_w
@@ -14,7 +15,10 @@ from data_farm.app.bootstrap import load_data_farm_config
 from data_farm.cli.base import AppContext, ProjectNamespace
 from data_farm.utils.config import data_farm_config, default_data_source_config, store_data_farm_config
 
+logger = logging.getLogger("dfarm")
 
+
+# ruff: noqa: PLR0915
 def handle_project(ctx: AppContext, ns: ProjectNamespace) -> None:
     if ns.projects_root:
         # Set Data Farm projects root directory.
@@ -32,10 +36,11 @@ def handle_project(ctx: AppContext, ns: ProjectNamespace) -> None:
         if len(np.parts) == 1:
             Path(pr / ns.init).mkdir(parents=True, exist_ok=True)
             create_project_structure(pr / ns.init)
-
+            logger.info("Data Farm project created at: %s", pr / ns.init)
         elif Path(ns.init).is_absolute() or Path(ns.init).parent == Path("."):
             Path(ns.init).mkdir(parents=True, exist_ok=True)
             create_project_structure(Path(ns.init))
+            logger.info("Data Farm project created at: %s", ns.init)
 
 
 def resolve_target(value: str, projects_root: Path) -> Path:
