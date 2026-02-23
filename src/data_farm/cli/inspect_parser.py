@@ -16,7 +16,7 @@ def build_inspect_parser(subparsers: SubParsers) -> None:
     inspect.add_argument("-c", "--config", required=False, help=msg("cli.help.insp.config"))
     inspect.add_argument("-s", "--seed", required=False, help=msg("cli.help.insp.seed"))
     inspect.add_argument("-t", "--table", required=False, help=msg("cli.help.insp.table"))
-    inspect.add_argument("-r", "--rows", required=False, help=msg("cli.help.insp.rows"))
+    inspect.add_argument("-r", "--rows", default=1, required=False, type=int, help=msg("cli.help.insp.rows"))
     inspect.add_argument("-o", "--output-file", required=False, help=msg("cli.help.insp.out"))
     inspect.add_argument("-m", "--schema", required=False, help=msg("cli.help.insp.schema"))
     inspect.add_argument(
