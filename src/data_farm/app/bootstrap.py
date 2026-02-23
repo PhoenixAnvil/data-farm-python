@@ -41,11 +41,11 @@ from data_farm.utils.random import create_rng
 
 
 def boot_app_from_ns(ns: Namespace) -> AppContext:
-    cr = getattr(ns, "config_dir", data_farm_config_root)
-    dr = getattr(ns, "data_dir", data_farm_data_root)
-    cp = getattr(ns, "config_path", data_farm_config_path)
-    logs_dir = getattr(ns, "logs_dir", data_farm_logs_dir)
-    seed = getattr(ns, "seed", None)
+    cr = ns.config_dir or data_farm_config_root
+    dr = ns.data_dir or data_farm_data_root
+    cp = ns.config_path or data_farm_config_path
+    log_file = ns.log_file or data_farm_logs_dir
+    seed = ns.seed
     dcd = data_farm_config
 
     validate_app_dirs(cr, dr)
@@ -72,7 +72,7 @@ def boot_app_from_ns(ns: Namespace) -> AppContext:
         rng=rng,
         projects_root=Path(cd.get("project", {}).get("projects_root", Path(dr) / "projects")),
         max_generation=cd.get("limits", {}).get("max_generation", 1000000),
-        logs_dir=logs_dir,
+        log_file=log_file,
         debug=debug,
     )
 

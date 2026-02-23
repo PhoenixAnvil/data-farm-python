@@ -19,7 +19,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Protocol
 
-from data_farm.messages.messages import msg
+from data_farm.cli.app_parser import build_app_parser
+from data_farm.cli.inspect_parser import build_inspect_parser
+from data_farm.cli.project_parser import build_project_parser
 
 
 # ruff: noqa: PLR0915
@@ -38,51 +40,11 @@ def build_parser() -> argparse.ArgumentParser:
         description=program_description,
     )
 
-    parser.add_argument("-v", "--verbose", action="count", default=0, help=msg("cli.help.global.verbose"))
-    parser.add_argument("-l", "--log-file", type=str, help=msg("cli.help.global.log_file"))
-    parser.add_argument("-d", "--debug", action="store_true", required=False, help=msg("cli.help.global.debug"))
-
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    app = subparsers.add_parser("app", help=msg("cli.help.app"))
-    app.add_argument("-c", "--config-dir", required=False, help=msg("cli.help.app.ovr_cfg_dir"))
-    app.add_argument("-d", "--data-dir", required=False, help=msg("cli.help.app.ovr_data_dir"))
-    app.add_argument("-p", "--config-path", required=False, help=msg("cli.help.app.ovr_cfg_path"))
-
-    project = subparsers.add_parser("project", help=msg("cli.help.prj.manage"))
-    project.add_argument(
-        "-r",
-        "--projects-root",
-        required=False,
-        help=msg("cli.help.prj.set_root"),
-    )
-    project.add_argument("-i", "--init", required=False, help=msg("cli.help.prj.init"))
-    project.add_argument(
-        "-l",
-        "--list",
-        action="store_true",
-        required=False,
-        help=msg("cli.help.prj.list"),
-    )
-
-    inspect = subparsers.add_parser("inspect", help=msg("cli.help.insp"))
-    inspect.add_argument("-p", "--project", required=True, help=msg("cli.help.insp.project"))
-    inspect.add_argument("-c", "--config", required=False, help=msg("cli.help.insp.config"))
-    inspect.add_argument("-s", "--seed", required=False, help=msg("cli.help.insp.seed"))
-    inspect.add_argument("-t", "--table", required=False, help=msg("cli.help.insp.table"))
-    inspect.add_argument("-r", "--rows", required=False, help=msg("cli.help.insp.rows"))
-    inspect.add_argument("-o", "--output-file", required=False, help=msg("cli.help.insp.out"))
-    inspect.add_argument("-m", "--schema", required=False, help=msg("cli.help.insp.schema"))
-    inspect.add_argument(
-        "--insert-batch-size",
-        required=False,
-        default=1,
-        type=int,
-        help="Rows per INSERT statement (1 = one INSERT per row).",
-    )
-
-    rng = subparsers.add_parser("rng", help=msg("cli.help.rng"))
-    rng.add_argument("-s", "--seed", required=True, help=msg("cli.help.rng.seed"))
+    build_app_parser(parser)
+    build_project_parser(subparsers)
+    build_inspect_parser(subparsers)
 
     return parser
 
@@ -110,7 +72,7 @@ class AppContext:
     rng: random.Random
     projects_root: Path
     max_generation: int
-    logs_dir: str
+    log_file: str
     debug: bool
 
 
