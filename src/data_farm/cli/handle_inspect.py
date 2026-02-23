@@ -90,7 +90,7 @@ class InspectionContext:
 
 def create_inspection_context(app_ctx: AppContext, ns: InspectNamespace) -> InspectionContext:
     projects_root = app_ctx.projects_root
-    rows_per_table = int(ns.rows) or int(app_ctx.max_generation)
+    rows_per_table = ns.rows or app_ctx.max_generation
     project_path = Path(ns.project)
 
     project_dir = projects_root / project_path if len(project_path.parts) == 1 else project_path
