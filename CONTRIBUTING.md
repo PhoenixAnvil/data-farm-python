@@ -16,7 +16,7 @@ This guide covers how to:
 
 - Repo: [GitHub](https://github.com/PhoenixAnvil/data-farm-python)
 - Issues: [GitHub Issues](https://github.com/PhoenixAnvil/data-farm-python/issues)
-- Project board: [GitHub Project](https://github.com/users/PhoenixAnvil/projects/1/views/1)
+- Project Board: [GitHub Project](https://github.com/users/PhoenixAnvil/projects/1/views/1)
 
 ---
 
@@ -40,7 +40,7 @@ By participating, you agree to uphold it. Please see `CODE_OF_CONDUCT.md` for de
 ### How work is tracked
 
 - **Issues** are the source of truth for bugs/features
-- The **Project board** tracks status/progress across issues and PRs
+- The **Project Board** tracks status/progress across issues and PRs
 
 If you’re unsure what to pick up, grab an issue and leave a short comment like:
 

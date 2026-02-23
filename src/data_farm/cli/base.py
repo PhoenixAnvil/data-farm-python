@@ -1,16 +1,9 @@
-"""
-Define the command-line interface contract for Data Farm.
+"""Define the Data Farm CLI surface.
 
-This module constructs and returns a configured ``argparse`` parser
-describing the supported commands and options.
+This module constructs the top-level argparse parser and defines the typed
+contracts used by downstream layers (bootstrap/dispatch/handlers).
 
-It defines the CLI surface of the application but does not:
-
-- Parse argument values into application state
-- Interpret configuration semantics
-- Dispatch execution or invoke pipeline stages
-
-Those responsibilities belong to the bootstrap and dispatch layers.
+This module does not execute application work; it only defines the CLI shape.
 """
 
 import argparse
@@ -50,19 +43,6 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 @dataclass(frozen=True)
-class InspectArgs:
-    project: str
-    config: str
-    seed: int | str
-
-
-@dataclass(frozen=True)
-class ProjectArgs:
-    projects_root: str
-    init: str
-
-
-@dataclass(frozen=True)
 class AppContext:
     config_dir: str
     data_dir: str
@@ -84,7 +64,6 @@ class InspectNamespace(Protocol):
     table: str
     rows: int
     output_file: str
-    logs_dir: str
     schema: str
     insert_batch_size: int
 
@@ -93,11 +72,3 @@ class ProjectNamespace(Protocol):
     command: str
     projects_root: str
     init: str
-    logs_dir: str
-
-
-class AppNamespace(Protocol):
-    command: str
-    config_root: str
-    data_root: str
-    config_path: str

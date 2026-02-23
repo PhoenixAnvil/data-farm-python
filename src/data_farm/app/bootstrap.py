@@ -1,18 +1,20 @@
-"""
-Bootstrap Data Farm application state from configuration sources.
+"""Bootstrap Data Farm application state.
 
 This module builds an :class:`~data_farm.cli.base.AppContext` by combining:
-- Defaults defined by Data Farm
-- A Data Farm configuration file (if present)
-- Command-line arguments
+- Data Farm defaults
+- A Data Farm configuration file (creating one on first run if needed)
+- Command-line overrides
 
-As part of bootstrapping, application directories may be created and
-logging is configured based on command-line arguments.
+Bootstrap is responsible for lightweight setup only:
+- Ensuring application directories exist
+- Loading/storing configuration
+- Creating the global RNG
+- Configuring logging for the application
 
-This module does not:
-- Parse command-line arguments
+Bootstrap does not:
+- Parse CLI arguments
 - Execute pipeline work (inspect/suggest/plan/generate/emit)
-- Perform I/O beyond configuration and application directory setup
+- Perform heavy I/O beyond config and directory setup
 """
 
 from __future__ import annotations

@@ -1,14 +1,7 @@
-"""
-Generate and return a SQL INSERT statement.
+"""SQL emission helpers.
 
-This module generates a SQL INSERT statement based on a
-list of ``ColumnEmitDefinition``s. The INSERT statement
-is then returned to the calling layer.
-
-This module does not:
-- Generate the values included in the INSERT statement
-- Inspect the data source to obtain column metadata used
-  in value generation
+This module formats generated values into SQL INSERT statements efficiently.
+It contains fast value-formatting helpers used by the hot generation loop.
 """
 
 from __future__ import annotations

@@ -1,14 +1,8 @@
-"""
-Dispatch Data Farm project-related requests.
+"""Handle `dfarm project` commands.
 
-This module handles these requests:
-- Sets a new projects_root directory
-- Initializes a new Data Farm project
-
-This module does not:
-- Bootstrap the application
-- Parse or interpret command-line arguments
-- Dispatch a data source inspection
+This module implements project-focused actions such as initialization and
+listing. It is invoked by the CLI dispatch layer and uses the shared
+application context.
 """
 
 from pathlib import Path

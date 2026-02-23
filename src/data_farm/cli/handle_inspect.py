@@ -1,25 +1,15 @@
-"""
-Execute a dispatched inspection request.
+"""Handle the `dfarm inspect` command.
 
-This module orchestrates a data source inspection.
+This module orchestrates a data source inspection and generation run:
 
-- An Inspection Context is built
-- The data source is inspected returning column
-  metadata
-- Data generation plans are built based on the metadata
-- Data is then generated to console or file
+- Build an inspection context
+- Inspect the source schema (tables/columns/types)
+- Suggest strategies for each column
+- Build generation plans
+- Generate output to stdout or a file
 
-A data source inspection involves two key actions:
-- Interrogate the data source to know column metadata
-- Build a set of SQL statements or an input file for
-  a database platform based on column metadata
-
-An inspection calls on dedicated layers to fullfil
-each action. An inspection does not:
-
-- Directly implement *all* functionality required for
-  an inspection
-- Parse or dispatch command-line arguments.
+This module coordinates layers; it should not contain low-level inspector or
+planner implementations.
 """
 
 from __future__ import annotations
@@ -129,7 +119,11 @@ def create_inspection_context(app_ctx: AppContext, ns: InspectNamespace) -> Insp
 
 
 def inspect(data_source_config: list[dict[str, Any]], schema: str) -> list[TableInspection]:
-    with create_inspector(data_source_config[0]) as insp:
+    # data_source_config contains a list of two dictionaries
+    # with the first index being the main data source config
+    # rather than the rng config. We want the first.
+    DS_CONFIG_INDEX = 0
+    with create_inspector(data_source_config[DS_CONFIG_INDEX]) as insp:
         db = cast(RelationalInspector, insp)
         return db.inspect_all_tables(schema=schema)
 

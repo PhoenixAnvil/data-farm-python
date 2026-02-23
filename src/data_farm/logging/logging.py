@@ -50,5 +50,5 @@ class IndentFormatter(logging.Formatter):
         if datefmt is not None:
             return super().formatTime(record, datefmt)
 
-        dt = datetime.fromtimestamp(record.created)
+        dt = datetime.fromtimestamp(record.created, tz=UTC)
         return dt.strftime("%Y-%m-%d %H:%M:%S.") + f"{int(record.msecs):03d}"
