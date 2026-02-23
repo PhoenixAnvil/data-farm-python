@@ -19,10 +19,3 @@ def build_project_parser(subparsers: SubParsers) -> None:
         help=msg("cli.help.prj.set_root"),
     )
     project.add_argument("-i", "--init", required=False, help=msg("cli.help.prj.init"))
-    project.add_argument(
-        "-l",
-        "--list",
-        action="store_true",
-        required=False,
-        help=msg("cli.help.prj.list"),
-    )

@@ -40,4 +40,4 @@ def dispatch(parser: ArgumentParser, ns: Namespace) -> None:
             handle_inspect(ctx, ins)
     else:
         parser.print_help()
-        sys.exit(3)
+        sys.exit(2)
