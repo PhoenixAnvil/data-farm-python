@@ -85,10 +85,36 @@ def validate_app_dirs(app_config_root: str, app_data_root: str) -> None:
         make_data_farm_data_dir(app_data_root)
 
 
+# ruff: noqa: PLR0915
 def setup_logger(ns: Namespace) -> None:
-    log_file = ns.log_file
-    if log_file is not None:
-        log_file = Path(log_file)
-        if log_file == Path("."):
-            log_file = generate_log_file_name()
-        setup_logging(verbosity=ns.verbose, log_file=str(log_file))
+    """
+    Configure logging for the application.
+
+    Rules for --log-file:
+      - not provided: console logging only
+      - "." (or "./", ".\\"): auto-generate a file name in CWD
+      - existing directory path: auto-generate a file name in that directory
+      - otherwise: treat as a file path
+    """
+    log_file: str | None = None
+
+    raw = getattr(ns, "log_file", None)
+    if raw:
+        raw_str = str(raw).strip()
+
+        # Treat ".", "./", ".\\" as "current directory"
+        if raw_str in {".", "./", ".\\"}:
+            log_path = Path(generate_log_file_name())
+            log_file = str(log_path)
+        else:
+            p = Path(raw_str).expanduser()
+
+            # If they provided a directory, write an auto-named log file inside it.
+            if p.exists() and p.is_dir():
+                log_path = p / Path(generate_log_file_name()).name
+                log_file = str(log_path)
+            else:
+                # Otherwise treat it as a file path (even if it doesn't exist yet).
+                log_file = str(p)
+
+    setup_logging(verbosity=ns.verbose, log_file=log_file)
