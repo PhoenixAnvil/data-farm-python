@@ -68,7 +68,7 @@ def boot_app_from_ns(ns: Namespace) -> AppContext:
         data_dir=dr,
         config_path=cp,
         config_data=cd,
-        seed=seed,
+        seed=seed_value,
         rng=rng,
         projects_root=Path(cd.get("project", {}).get("projects_root", Path(dr) / "projects")),
         max_generation=cd.get("limits", {}).get("max_generation", 1000000),
