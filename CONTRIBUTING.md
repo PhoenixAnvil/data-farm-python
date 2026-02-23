@@ -1,215 +1,228 @@
 # Contributing to Data Farm (Python Edition)
 
-Thanks for your interest in **Data Farm**! 🎉\
-Data Farm is a schema-aware test data generation tool for databases,
-CSV, JSON, and other structured sources.
+Thanks for your interest in contributing to **Data Farm**! 🎉  
+Data Farm is a schema-aware test-data generation tool for databases, CSV, JSON, and other structured sources.
 
-------------------------------------------------------------------------
+This guide covers how to:
 
-## Quick Links
+- Propose ideas / ask questions
+- File issues and bug reports
+- Set up a local dev environment
+- Submit high-quality pull requests
 
-- Repo: <https://github.com/PhoenixAnvil/data-farm-python>
-- Issues: <https://github.com/PhoenixAnvil/data-farm-python/issues>
-- Project Board:
-    <https://github.com/users/PhoenixAnvil/projects/1/views/1>
+---
 
-------------------------------------------------------------------------
+## Quick links
+
+- Repo: [GitHub](https://github.com/PhoenixAnvil/data-farm-python)
+- Issues: [GitHub Issues](https://github.com/PhoenixAnvil/data-farm-python/issues)
+- Project board: [GitHub Project](https://github.com/users/PhoenixAnvil/projects/1/views/1)
+
+---
 
 ## Code of Conduct
 
-This project follows the Contributor Covenant Code of Conduct. By
-participating, you agree to uphold it.
+This project follows the **Contributor Covenant Code of Conduct**.
 
-Please see `CODE_OF_CONDUCT.md` for reporting instructions.
+By participating, you agree to uphold it. Please see `CODE_OF_CONDUCT.md` for details and reporting instructions.
 
-------------------------------------------------------------------------
+---
 
-## What to Work On
+## What to work on
 
-### Good First Contributions
+### Good first contributions
 
 - Documentation improvements (README, docs, examples)
-- Tests that lock in behavior (especially edge cases + invariants)
+- Tests that lock in behavior (edge cases + invariants)
 - Small bug fixes or refactors that reduce complexity
-- New planner/suggestor coverage for missing SQL/data types
+- New planner/suggestor coverage for missing SQL/data types (when tracked in Issues)
 
-### How Work Is Tracked
+### How work is tracked
 
-- Issues are the source of truth for bugs and features
-- The Project board tracks status and progress
+- **Issues** are the source of truth for bugs/features
+- The **Project board** tracks status/progress across issues and PRs
 
-If unsure what to pick up, comment on an issue:
+If you’re unsure what to pick up, grab an issue and leave a short comment like:
 
-> "I'd like to take this one. Any gotchas before I start?"
+> I’d like to take this one. Any gotchas before I start?
 
-------------------------------------------------------------------------
+---
 
-## Filing Issues
+## Filing issues (bugs, features, questions)
 
-### Bug Reports
+### Bug reports
 
-Include:
+Please include:
 
-- Expected vs actual behavior
-- CLI command used (redact secrets)
+- What you expected vs what happened
+- The CLI command you ran (redact secrets)
 - OS + Python version
 - Minimal reproduction steps
-- Relevant logs or stack traces
+- Relevant logs / stack traces
 
-### Feature Requests
+### Feature requests
 
-Include:
+Please include:
 
-- The problem you're solving (the "why")
-- Proposed CLI shape (example command/output)
+- The problem you’re solving (the “why”)
+- A proposed UX/CLI shape (example command + output)
 - Constraints (performance, determinism, compatibility)
 
-------------------------------------------------------------------------
+---
 
-## Development Setup
+## Development setup
 
 ### Prerequisites
 
-- Python 3.11+
-- git
-- Optional: make
+- Python (see `pyproject.toml` for the current minimum)
+- `git`
+- Optional: `make`
 
 ### Clone
 
-``` bash
+```bash
 git clone https://github.com/PhoenixAnvil/data-farm-python.git
 cd data-farm-python
 ```
 
-### Virtual Environment
+### Create a virtual environment
 
-``` bash
+```bash
 python -m venv .venv
-# Windows PowerShell:
+
+# Windows PowerShell
 . .\.venv\Scripts\Activate.ps1
-# macOS/Linux:
+
+# macOS/Linux
 source .venv/bin/activate
 ```
 
-### Install Dev Dependencies
+### Install dependencies (dev)
 
-``` bash
+```bash
 python -m pip install -U pip
 python -m pip install -e ".[dev]"
 ```
 
-------------------------------------------------------------------------
+---
 
-## Tooling & Quality Gates
+## Tooling & quality gates
 
-### Install Pre-commit Hooks
+This repo uses **pre-commit** hooks to keep formatting/lint/testing consistent.
 
-``` bash
+### Install hooks
+
+```bash
 pre-commit install
 ```
 
-### Run All Hooks
+### Run hooks manually
 
-``` bash
+```bash
 pre-commit run --all-files
 ```
 
 ### Formatting (Black)
 
-``` bash
+```bash
 black .
 ```
 
 ### Linting (Ruff)
 
-``` bash
+```bash
 ruff check . --fix
 ```
 
 ### Tests (pytest)
 
-``` bash
+```bash
 pytest
 ```
 
-------------------------------------------------------------------------
+---
 
-## Running Data Farm Locally
+## Running Data Farm locally
 
-After editable install:
+After an editable install, you can run:
 
-``` bash
+```bash
 dfarm --help
 ```
 
-If contributing new commands or flags, include examples in docs or
-examples folder.
+If you add a new command/flag, please include a minimal example in `examples/` or docs.
 
-------------------------------------------------------------------------
+---
 
-## Branches, Commits, PRs
+## Branches, commits, PRs
 
-### Branch Naming
+### Branch naming
 
-- bugfix/`<short-description>`{=html}
-- feature/`<short-description>`{=html}
-- docs/`<short-description>`{=html}
-- test/`<short-description>`{=html}
-- refactor/`<short-description>`{=html}
+Use short, readable names:
 
-Example:
+- `bugfix/<short-description>`
+- `feature/<short-description>`
+- `docs/<short-description>`
+- `test/<short-description>`
+- `refactor/<short-description>`
 
-- feature/planner-uuid
+Examples:
+
+- `bugfix/inspect-null-schema`
+- `feature/planner-uuid`
+- `docs/cli-examples`
 
 ### Commits
 
-- One logical change per commit
-- Clear message explaining why
-- Keep diffs focused and reviewable
+Keep commits small and focused:
 
-### PR Checklist
+- One logical change per commit
+- Message explains the “why” (not just “what”)
+- Prefer reviewable diffs over “mega commits”
+
+### Pull request checklist
 
 Before opening a PR:
 
-- [ ] Tests added or updated
-- [ ] pytest passes locally
-- [ ] pre-commit passes
-- [ ] Docs updated if behavior changed
-- [ ] No secrets committed
+- [ ] Tests added/updated (if behavior changes)
+- [ ] `pytest` passes locally
+- [ ] `pre-commit run --all-files` passes
+- [ ] Docs updated if behavior/CLI changes
+- [ ] No secrets in configs/logs
 
-In PR description include:
+In the PR description, include:
 
 - What changed and why
-- Link to issue (e.g. Closes #123)
-- Design notes or tradeoffs
+- Link to the issue (e.g., `Closes #123`)
+- Design notes / tradeoffs (if relevant)
 
-------------------------------------------------------------------------
+---
 
-## Design Expectations
+## Design expectations (Data Farm style)
 
-Data Farm aims to be:
+Data Farm aims to stay:
 
-- Deterministic (seeded output)
-- CLI-friendly (clear messages, helpful errors)
-- Testable (thin CLI boundary, logic in classes/functions)
-- Readable (clarity over cleverness)
+- **Deterministic** (seeded/repeatable output where applicable)
+- **CLI-friendly** (clear messages, helpful errors, good exit codes)
+- **Testable** (logic in functions/classes; thin CLI boundary)
+- **Readable** (clarity over cleverness)
 
-When adding generators/planners/suggestors:
+If you’re adding a new generator/planner/suggestor:
 
-- Add invariant-based tests
-- Include at least one realistic example
-- Consider performance (avoid heavy per-row logic)
+- Include tests that validate the contract/invariants
+- Include at least one realistic example (docs/examples)
+- Consider performance (avoid per-row heavy work if you can)
 
-------------------------------------------------------------------------
+---
 
 ## Security
 
-If you discover a security issue, do not open a public issue. Follow
-contact instructions in CODE_OF_CONDUCT.md.
+If you believe you’ve found a security issue (secrets exposure, unsafe file handling, etc.), please **do not** open a public issue.
 
-------------------------------------------------------------------------
+Follow the contact instructions in `CODE_OF_CONDUCT.md`.
+
+---
 
 ## License
 
-By contributing, you agree that your contributions are licensed under
-the MIT License.
+By contributing, you agree that your contributions will be licensed under the **MIT License** used by this project.
