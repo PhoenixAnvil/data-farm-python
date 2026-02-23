@@ -1,18 +1,20 @@
-"""
-Dispatch application functionality based on command-line arguments.
+"""Dispatch application work based on parsed CLI arguments.
 
-This module accepts an ``argparse`` namespace containing parsed
-command-line arguments. Application functionality is then dispatched.
+This module receives an argparse namespace, boots the application context, and
+dispatches to the appropriate handler.
+
+Responsibilities:
+- Build :class:`~data_farm.cli.base.AppContext` via bootstrap
+- Route to subcommand handlers
 
 This module does not:
-- Parse command-line arguments
-- Directly implement application functionality
-
-All application functionality is encapsulated behind dedicated layers.
+- Parse arguments (argparse does that)
+- Implement pipeline work directly
 """
 
 import logging
-from argparse import Namespace
+import sys
+from argparse import ArgumentParser, Namespace
 from typing import cast
 
 from data_farm.app.bootstrap import boot_app_from_ns
@@ -24,7 +26,7 @@ from data_farm.logging.logging import timed
 logger = logging.getLogger("dfarm")
 
 
-def dispatch(ns: Namespace) -> None:
+def dispatch(parser: ArgumentParser, ns: Namespace) -> None:
     """Dispatch CLI argument processing."""
 
     ctx = boot_app_from_ns(ns)
@@ -36,3 +38,6 @@ def dispatch(ns: Namespace) -> None:
         ins = cast(InspectNamespace, ns)
         with timed(logger, "Dispatching inspect"):
             handle_inspect(ctx, ins)
+    else:
+        parser.print_help()
+        sys.exit(3)

@@ -1,17 +1,7 @@
-"""
-Defines the contract that all Emitters implement.
+"""Emitter interfaces.
 
-This module has one primary role--define the contract
-that all Emitters must implement.
-
-An Emitter accepts a table name and a list of
-``ColumnEmitDefinitions``.
-
-An Emitter returns an Iterable containing str objects.
-
-This module does not:
-- Inspect column metadata
---Generate value sets
+Emitters convert generated values into an output representation (e.g., SQL).
+This module defines the Emitter contract shared across concrete emitters.
 """
 
 from __future__ import annotations

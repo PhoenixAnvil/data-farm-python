@@ -7,7 +7,7 @@ from data_farm.cli.cli_dispatch import dispatch
 def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
-    dispatch(args)
+    dispatch(parser, args)
     return 0
 
 
