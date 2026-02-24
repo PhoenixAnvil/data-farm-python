@@ -9,6 +9,34 @@ SQL scripts using deterministic random generation.
 
 ------------------------------------------------------------------------
 
+## Project Status
+
+**Data Farm is in early development.**
+
+Version `v0.1.0` is a proof-of-concept release that validates the core workflow:
+
+- Project initialization
+- Configuration-driven schema inspection
+- Strategy suggestion
+- Deterministic data generation
+- SQL emission via CLI
+
+At this stage:
+
+- Generated values are intentionally simple (e.g., placeholder text patterns and small randomized sets).
+- Type coverage is limited.
+- Realistic domain-aware data generation is still evolving.
+- Breaking changes should be expected as the architecture matures.
+
+This release exists to:
+
+- Establish a stable CLI and packaging foundation.
+- Validate the inspect → plan → generate → emit pipeline.
+- Enable incremental improvement of planners and generators.
+- Provide a public artifact for feedback and iteration.
+
+Data Farm is not yet intended for production data generation workflows. Future releases will expand planner sophistication, improve realism, and strengthen architectural boundaries.
+
 ## Features
 
 - Inspect relational database schemas
@@ -29,7 +57,7 @@ SQL scripts using deterministic random generation.
 
 ## Installation
 
-Install from PyPI:
+Install from PyPI (Coming Soon!):
 
 ``` bash
 pip install datafarm
