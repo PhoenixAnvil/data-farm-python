@@ -24,7 +24,7 @@ from typing import Any, TextIO, cast
 
 from data_farm.cli.base import AppContext, InspectNamespace
 from data_farm.emitters.sql import format_values_fast, get_formatter
-from data_farm.logging.logging import timed
+from data_farm.logging.logging import timed, untimed
 from data_farm.models.models import TableInspection
 from data_farm.planners.context import PatternRegistry, PlanContext
 from data_farm.planners.generation_plan import GenerationPlan
@@ -100,12 +100,12 @@ def create_inspection_context(app_ctx: AppContext, ns: InspectNamespace) -> Insp
     batch_size = int(getattr(ns, "insert_batch_size", 1) or 1)
     batch_size = max(batch_size, 1)
 
-    logger.debug("Inspection Context: projects_root=%s", projects_root)
-    logger.debug("Inspection Context: project_dir=%s", project_dir)
-    logger.debug("Inspection Context: patterns_dir=%s", patterns_dir)
-    logger.debug("Inspection Context: rows_per_table=%d", rows_per_table)
-    logger.debug("Inspection Context: batch_size=%d", batch_size)
-    logger.debug("Inspection Context: schema=%s", schema)
+    untimed(logger, "Inspection Context: projects_root=%s", projects_root)
+    untimed(logger, "Inspection Context: project_dir=%s", project_dir)
+    untimed(logger, "Inspection Context: patterns_dir=%s", patterns_dir)
+    untimed(logger, "Inspection Context: rows_per_table=%d", rows_per_table)
+    untimed(logger, "Inspection Context: batch_size=%d", batch_size)
+    untimed(logger, "Inspection Context: schema=%s", schema)
 
     return InspectionContext(
         plan_context=plan_ctx,
