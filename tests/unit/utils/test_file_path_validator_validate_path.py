@@ -14,7 +14,7 @@ def test_validate_path_returns_path_for_existing_file(tmp_path: Path) -> None:
     p = tmp_path / "file.txt"
     p.write_text("ok")
 
-    result = FilePathValidator(str(p)).validate_path()
+    result = FilePathValidator(p).validate_path()
 
     assert result == p
 
@@ -57,7 +57,7 @@ def test_validate_path_error_cases(
 ) -> None:
     # Arrange
     p = make_path(tmp_path)
-    validator = FilePathValidator(str(p) if p is not None else None)
+    validator = FilePathValidator(p if p is not None else None)
 
     # Act
     with pytest.raises(exc_type) as excinfo:

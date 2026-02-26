@@ -70,5 +70,5 @@ class InspectNamespace(Protocol):
 
 class ProjectNamespace(Protocol):
     command: str
-    projects_root: str
-    init: str
+    projects_root: str | None
+    init: str | None
