@@ -21,7 +21,7 @@ from data_farm.app.bootstrap import boot_app_from_ns
 from data_farm.cli.base import InspectNamespace, ProjectNamespace
 from data_farm.cli.handle_inspect import handle_inspect
 from data_farm.cli.handle_project import handle_project
-from data_farm.logging.logging import timed
+from data_farm.logging.logging import timed, untimed
 
 logger = logging.getLogger("dfarm")
 
@@ -30,6 +30,9 @@ def dispatch(parser: ArgumentParser, ns: Namespace) -> None:
     """Dispatch CLI argument processing."""
 
     ctx = boot_app_from_ns(ns)
+    logger = logging.getLogger("dfarm")
+    untimed(logger, "Booting Data Farm...")
+
     if ns.command == "project":
         pns = cast(ProjectNamespace, ns)
         with timed(logger, "Dispatching project"):
