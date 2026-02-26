@@ -84,7 +84,7 @@ def create_inspection_context(app_ctx: AppContext, ns: InspectNamespace) -> Insp
     project_path = Path(ns.project)
 
     project_dir = projects_root / project_path if len(project_path.parts) == 1 else project_path
-    ds_config = load_data_source_config(str(project_dir / "data_source_config.toml"))
+    ds_config = load_data_source_config(project_dir / "data_source_config.toml")
     rng = app_ctx.rng
 
     suggestor_reg = build_default_registry()

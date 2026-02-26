@@ -19,7 +19,7 @@ data_farm_config: dict[str, Any] = {"project": {"projects_root": str(Path(data_f
 data_farm_logs_dir = str(Path(user_data_dir("datafarm", appauthor=False)) / "logs")
 
 
-def load_data_source_config(config_path: str | None = None) -> list[dict[str, Any]]:
+def load_data_source_config(config_path: Path | None = None) -> list[dict[str, Any]]:
     """TBD"""
     path = FilePathValidator(config_path).validate_path()
     with path.open("rb") as f:
@@ -50,7 +50,7 @@ def validate_data_source_config(config: dict[str, Any]) -> None:
         raise ValueError(msg("err.utils.config.val_data_src_cfg"))
 
 
-def load_data_farm_config(config_path: str) -> dict[str, Any]:
+def load_data_farm_config(config_path: Path) -> dict[str, Any]:
     path = FilePathValidator(config_path).validate_path()
     with path.open("rb") as f:
         data: dict[str, Any] = tomllib.load(f)
@@ -65,11 +65,10 @@ def validate_data_farm_config(config: dict[str, Any]) -> None:
         raise ValueError(msg("err.utils.config.val_data_src_cfg"))
 
 
-def store_data_farm_config(config_path: str, config: dict[str, Any]) -> None:
+def store_data_farm_config(config_path: Path, config: dict[str, Any]) -> None:
     validate_data_farm_config(config)
-    path = Path(config_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("wb") as f:
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    with config_path.open("wb") as f:
         tomli_w.dump(config, f)
 
 

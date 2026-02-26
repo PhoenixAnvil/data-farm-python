@@ -56,9 +56,9 @@ def boot_app_from_ns(ns: Namespace) -> AppContext:
     validate_app_dirs(cr, dr)
 
     if not app_config_file_exists(cp):
-        store_data_farm_config(cp, dcd)
+        store_data_farm_config(Path(cp), dcd)
 
-    cd = load_data_farm_config(cp)
+    cd = load_data_farm_config(Path(cp))
 
     logger.info("Data Farm configuration loaded from: %s", cp)
 
