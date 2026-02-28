@@ -36,11 +36,11 @@ class JSONBPlanner:
             allow_null=column.nullable,
             fixed_length=None,
             min_length=0,
-            max_length=10,
+            max_length=100,
         )
 
         gen = TextGenerator(ctx.rng, pattern, field_def)
-        return (SqlType.JSON, gen.generate)
+        return (SqlType.JSONB, gen.generate)
 
     def plan(
         self,
@@ -62,7 +62,7 @@ class JSONBPlanner:
             allow_null=column.nullable,
             fixed_length=None,
             min_length=0,
-            max_length=10,
+            max_length=100,
         )
 
         value = TextGenerator(ctx.rng, pattern, field_def).generate()
@@ -71,7 +71,7 @@ class JSONBPlanner:
 
         return ColumnEmitDefinition(
             name=column.name,
-            data_type=SqlType.JSON,
+            data_type=SqlType.JSONB,
             value=value,
         )
 

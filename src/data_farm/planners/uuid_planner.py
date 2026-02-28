@@ -39,7 +39,7 @@ class UUIDPlanner:
             allow_null=column.nullable,
             fixed_length=None,
             min_length=0,
-            max_length=10,
+            max_length=200,
         )
 
         gen = TextGenerator(ctx.rng, pattern, field_def)
@@ -65,7 +65,7 @@ class UUIDPlanner:
             allow_null=column.nullable,
             fixed_length=None,
             min_length=0,
-            max_length=10,
+            max_length=200,
         )
 
         value = TextGenerator(ctx.rng, pattern, field_def).generate()

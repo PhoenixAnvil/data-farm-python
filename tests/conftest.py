@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import logging
 import random
+from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
@@ -74,3 +76,39 @@ def col_short_string() -> ColumnInspection:
 pytest_plugins = [
     "tests.helpers.factories",
 ]
+
+LOGGER_NAME = "dfarm"
+
+
+# ruff: noqa: PLR0915
+@pytest.fixture()
+def dfarm_logger() -> Iterator[logging.Logger]:
+    """
+    Yield a clean dfarm logger for unit tests.
+
+    - Clears handlers and disables propagation.
+    - Restores original handlers afterwards.
+    """
+    logger = logging.getLogger(LOGGER_NAME)
+    old_handlers = list(logger.handlers)
+    old_propagate = logger.propagate
+    old_level = logger.level
+
+    logger.handlers.clear()
+    logger.propagate = False
+    logger.setLevel(logging.DEBUG)
+
+    try:
+        yield logger
+    finally:
+        logger.handlers.clear()
+        for h in old_handlers:
+            logger.addHandler(h)
+        logger.propagate = old_propagate
+        logger.setLevel(old_level)
+
+
+@pytest.fixture()
+def tmp_log_base(tmp_path: Path) -> Path:
+    # Base path used by setup_logging(log_file=...) which later derives .csv/.jsonl
+    return tmp_path / "dfarm.log"

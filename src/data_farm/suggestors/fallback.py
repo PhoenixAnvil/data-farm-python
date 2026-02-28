@@ -39,6 +39,12 @@ def _fallback_strategy(sql_type: SqlType, col_name: str, length: int | None) -> 
     elif sql_type == SqlType.DATETIME:
         return "datetime_recent", "fallback: datetime/timestamp type"
 
+    elif sql_type == SqlType.JSON:
+        return "json", "fallback: json type"
+
+    elif sql_type == SqlType.JSONB:
+        return "jsonb", "fallback: jsonb type"
+
     elif sql_type == SqlType.STRING:
         return _string_fallback(length)
 

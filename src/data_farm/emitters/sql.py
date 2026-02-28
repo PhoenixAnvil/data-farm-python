@@ -78,6 +78,9 @@ def build_vals(emit_defs: list[ColumnEmitDefinition]) -> str:
     parts: list[str] = []
     append = parts.append
     for ed in emit_defs:
+        if ed.value is None:
+            append("NULL")
+            continue
         fmt = _FORMATTERS.get(ed.data_type)
         append(str(ed.value) if fmt is None else fmt(ed.value))
     return ", ".join(parts)
