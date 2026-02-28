@@ -1,25 +1,33 @@
+from __future__ import annotations
+
 import sys
 
 from data_farm.cli.base import build_parser
 from data_farm.cli.cli_dispatch import dispatch
 
 
-def main() -> int:
-    parser = build_parser()
-    args = parser.parse_args()
-    dispatch(parser, args)
-    return 0
+def main(argv: list[str] | None = None) -> int:
+    """
+    Return a process exit code (0 success, non-zero failure).
+    No SystemExit raised here; keep it test-friendly.
+    """
+    if argv is None:
+        argv = sys.argv[1:]
+
+    try:
+        parser = build_parser()
+        args = parser.parse_args(argv)
+        dispatch(parser, args)
+        return 0
+
+    except FileNotFoundError as err:
+        print(f"Error: {err}", file=sys.stderr)
+        return 1
+
+    except Exception as err:
+        print(f"Unexpected error: {err}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    try:
-        raise SystemExit(main())
-    except FileNotFoundError as err:
-        print(f"Error: {err}", file=sys.stderr)
-        raise SystemExit(1) from err
-    except Exception as err:
-        import traceback
-
-        traceback.print_exc()
-        print(f"Unexpected error: {err}", file=sys.stderr)
-        raise SystemExit(1) from err
+    raise SystemExit(main())

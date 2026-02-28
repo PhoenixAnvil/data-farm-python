@@ -32,7 +32,7 @@ class PatternRegistry:
             raise FileNotFoundError(f"Pattern file not found: {path}")
 
         values: list[str] = []
-        for line in path.read_text(encoding="utf-8").splitlines():
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
             v = line.strip()
             if not v:
                 continue

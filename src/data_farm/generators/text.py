@@ -1,6 +1,7 @@
 """ """
 
 import random
+import string
 
 from data_farm.field.text import TextFieldDefinition
 from data_farm.generators.base import ValueGenerator
@@ -27,9 +28,10 @@ class TextGenerator(ValueGenerator):
         self._valid_choices: list[str] = [c for c in pattern.choices if min_len <= len(c) <= max_len]
 
         if not self._valid_choices and not field_def.allow_null:
-            msg1 = "Valid choice cannot be found"
-            msg2 = " and field cannot be null."
-            raise ValueError(f"{msg1}{msg2}")
+            # Fallback: generate a random string if no valid choices and field cannot be null
+            self._valid_choices.append(
+                "".join(rng.choices(string.ascii_letters + string.digits + string.punctuation, k=int(max_len)))
+            )
 
     def generate(self) -> str | None:
         """Return a random valid choice, or None when nulls are allowed."""

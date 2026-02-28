@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import copy
+from dataclasses import dataclass, field
 
 from data_farm.messages.messages import msg
 from data_farm.planners.boolean_planner import BooleanPlanner
@@ -15,7 +16,7 @@ from data_farm.planners.uuid_planner import UUIDPlanner
 
 @dataclass(slots=True)
 class PlannerRegistry:
-    _by_strategy: dict[str, ColumnPlanner]
+    _by_strategy: dict[str, ColumnPlanner] = field(default_factory=lambda: {})
 
     def register(self, planner: ColumnPlanner, *aliases: str) -> None:
         keys = [planner.strategy, *aliases]
@@ -28,7 +29,10 @@ class PlannerRegistry:
             self._by_strategy[key] = planner
 
     def get(self, strategy: str) -> ColumnPlanner | None:
-        return self._by_strategy.get(strategy.strip().lower())
+        key = strategy.strip().lower()
+        if not key:
+            return None
+        return self._by_strategy.get(key)
 
     @classmethod
     def empty(cls) -> PlannerRegistry:
@@ -46,3 +50,6 @@ class PlannerRegistry:
         reg.register(JSONBPlanner())
         reg.register(DateTimePlanner())
         return reg
+
+    def all(self) -> dict[str, ColumnPlanner]:
+        return copy.deepcopy(self._by_strategy)

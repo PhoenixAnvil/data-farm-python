@@ -115,10 +115,10 @@ class StatusCodeSuggestor(PatternSuggestor):
         if not any(k in n for k in ("status", "state", "type", "category", "code")):
             return None
 
-        t = col.data_type.name.upper()
+        t = col.data_type.name
 
         # Strings are common for these fields
-        if any(k in t for k in (SqlType.TEXT, SqlType.STRING, SqlType.FIXED_STRING)):
+        if any(k == t for k in (SqlType.TEXT, SqlType.STRING, SqlType.FIXED_STRING)):
             return _mk(
                 strategy="choice_pool",
                 pattern_id="choice_pool",
