@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from data_farm.models.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
-from data_farm.planners.context import PlanContext
-from data_farm.planners.numeric_planner import NumericPlanner
-from data_farm.utils.enums import SqlType
+from data_farm.application.context import PlanContext
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
+from data_farm.domain.planners.numeric_planner import NumericPlanner
 
 
 def test_numeric_planner_emits_value(plan_context: PlanContext) -> None:

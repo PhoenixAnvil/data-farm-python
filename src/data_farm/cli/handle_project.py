@@ -16,7 +16,7 @@ from typing import Any
 import tomli_w
 from platformdirs import user_data_path
 
-from data_farm.app.bootstrap import load_data_farm_config
+from data_farm.application.bootstrap import load_data_farm_config
 from data_farm.cli.base import AppContext, ProjectNamespace
 from data_farm.utils.config import data_farm_config, default_data_source_config, store_data_farm_config
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from data_farm.models.models import PatternSuggestion
-from data_farm.suggestors.engine import choose_best
+from data_farm.domain.model.models import PatternSuggestion
+from data_farm.domain.suggestors.engine import choose_best
 
 
 def test_choose_best_prefers_higher_confidence() -> None:

@@ -4,14 +4,14 @@ import random
 from datetime import datetime
 from pathlib import Path
 
-from data_farm.models.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
-from data_farm.patterns.registry import PatternRegistry
-from data_farm.planners.boolean_planner import BooleanPlanner
-from data_farm.planners.context import PlanContext
-from data_farm.planners.datetime_planner import DateTimePlanner
-from data_farm.planners.int_planner import IntPlanner
-from data_farm.planners.uuid_planner import UUIDPlanner
-from data_farm.utils.enums import SqlType
+from data_farm.application.context import PlanContext
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
+from data_farm.domain.planners.boolean_planner import BooleanPlanner
+from data_farm.domain.planners.datetime_planner import DateTimePlanner
+from data_farm.domain.planners.int_planner import IntPlanner
+from data_farm.domain.planners.uuid_planner import UUIDPlanner
+from data_farm.infrastructure.patterns.filesystem_pattern_source import FilesystemPatternSource
 
 
 def _ctx(tmp_path: Path) -> PlanContext:
@@ -21,7 +21,7 @@ def _ctx(tmp_path: Path) -> PlanContext:
     (d / "ages.pat").write_text("18\n21\n35\n", encoding="utf-8")
     (d / "uuid.pat").write_text("8dd6d9d3-af9c-4ca7-8c32-a9956a29561d\n", encoding="utf-8")
     (d / "datetime_recent.pat").write_text("2024-01-01T00:00:00Z\n2024-01-02T00:00:00Z\n", encoding="utf-8")
-    reg = PatternRegistry(patterns_dir=d)
+    reg = FilesystemPatternSource(patterns_dir=d)
     return PlanContext(rng=random.Random(123), patterns=reg, rows_per_table=3)
 
 

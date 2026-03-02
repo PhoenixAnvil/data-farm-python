@@ -3,12 +3,12 @@ from __future__ import annotations
 import random
 from pathlib import Path
 
+from data_farm.application.context import PlanContext
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
+from data_farm.domain.planners.registry import PlannerRegistry
 from data_farm.emitters.sql import SqlEmitter
-from data_farm.models.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
-from data_farm.patterns.registry import PatternRegistry
-from data_farm.planners.context import PlanContext
-from data_farm.planners.registry import PlannerRegistry
-from data_farm.utils.enums import SqlType
+from data_farm.infrastructure.patterns.filesystem_pattern_source import FilesystemPatternSource
 
 
 # ruff: noqa: PLR0915
@@ -18,7 +18,7 @@ def test_two_column_row_generation_is_repeatable(tmp_path: Path) -> None:
     d.mkdir()
     (d / "first_names.pat").write_text("Alice\nBob\nCharlie\n", encoding="utf-8")
     (d / "email.pat").write_text("a@example.com\nb@example.com\n", encoding="utf-8")
-    reg = PatternRegistry(patterns_dir=d)
+    reg = FilesystemPatternSource(patterns_dir=d)
 
     ctx1 = PlanContext(rng=random.Random(123), patterns=reg, rows_per_table=3)
     ctx2 = PlanContext(rng=random.Random(123), patterns=reg, rows_per_table=3)

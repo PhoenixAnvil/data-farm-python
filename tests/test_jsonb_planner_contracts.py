@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from data_farm.models.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
-from data_farm.planners.context import PlanContext
-from data_farm.planners.jsonb_planner import JSONBPlanner
-from data_farm.utils.enums import SqlType
+from data_farm.application.context import PlanContext
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
+from data_farm.domain.planners.jsonb_planner import JSONBPlanner
 
 
 def test_jsonb_planner_emits_json_string(plan_context: PlanContext) -> None:

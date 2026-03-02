@@ -2,8 +2,8 @@ from collections.abc import Callable
 
 import pytest
 
-from data_farm.models.models import ColumnInspection
-from data_farm.suggestors.builtins import EmailSuggestor
+from data_farm.domain.model.models import ColumnInspection
+from data_farm.domain.suggestors.builtins import EmailSuggestor
 
 MakeCol = Callable[..., ColumnInspection]
 

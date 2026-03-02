@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from data_farm.models.models import ColumnInspection, PatternSuggestion
-from data_farm.planners.boolean_planner import BooleanPlanner
-from data_farm.planners.context import PlanContext
-from data_farm.planners.datetime_planner import DateTimePlanner
-from data_farm.planners.int_planner import IntPlanner
-from data_farm.planners.uuid_planner import UUIDPlanner
+from data_farm.application.context import PlanContext
+from data_farm.domain.model.models import ColumnInspection, PatternSuggestion
+from data_farm.domain.planners.boolean_planner import BooleanPlanner
+from data_farm.domain.planners.datetime_planner import DateTimePlanner
+from data_farm.domain.planners.int_planner import IntPlanner
+from data_farm.domain.planners.uuid_planner import UUIDPlanner
 
 
 def test_boolean_planner_compile_returns_callable(plan_context: PlanContext, col_short_string: ColumnInspection) -> None:

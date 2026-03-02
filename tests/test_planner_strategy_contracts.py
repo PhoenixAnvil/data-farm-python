@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from data_farm.planners.registry import PlannerRegistry
+from data_farm.domain.planners.registry import PlannerRegistry
 
 
 def test_planner_registry_returns_planner_for_string() -> None:

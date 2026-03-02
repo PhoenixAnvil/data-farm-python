@@ -13,34 +13,22 @@ This module does not:
 """
 
 import logging
-import sys
 from argparse import ArgumentParser, Namespace
-from typing import cast
 
-from data_farm.app.bootstrap import boot_app_from_ns
-from data_farm.cli.base import InspectNamespace, ProjectNamespace
-from data_farm.cli.handle_inspect import handle_inspect
-from data_farm.cli.handle_project import handle_project
-from data_farm.logging.logging import timed, untimed
+from data_farm.application.bootstrap import boot_app_from_ns
+from data_farm.application.use_cases.run_cli_command import run_cli_command
 
 logger = logging.getLogger("dfarm")
 
 
-def dispatch(parser: ArgumentParser, ns: Namespace) -> None:
-    """Dispatch CLI argument processing."""
+def dispatch(parser: ArgumentParser, ns: Namespace) -> int:
+    """Dispatch CLI argument processing. Returns a process exit code."""
+    ARGPARSE_ERROR_CODE = 2
 
     ctx = boot_app_from_ns(ns)
-    logger = logging.getLogger("dfarm")
-    untimed(logger, "Booting Data Farm...")
+    result = run_cli_command(ctx, ns)
 
-    if ns.command == "project":
-        pns = cast(ProjectNamespace, ns)
-        with timed(logger, "Dispatching project"):
-            handle_project(ctx, pns)
-    elif ns.command == "inspect":
-        ins = cast(InspectNamespace, ns)
-        with timed(logger, "Dispatching inspect"):
-            handle_inspect(ctx, ins)
-    else:
+    if result.exit_code == ARGPARSE_ERROR_CODE:
         parser.print_help()
-        sys.exit(2)
+
+    return result.exit_code
