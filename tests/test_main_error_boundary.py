@@ -5,7 +5,7 @@ from typing import Any
 
 from pytest import MonkeyPatch
 
-import data_farm.main as df_main
+import data_farm.cli.main as df_main
 
 
 @dataclass
@@ -18,8 +18,8 @@ class FakeParser:
         return FakeArgs()
 
 
-def _noop_dispatch(_parser: Any, _args: Any) -> None:
-    return None
+def _noop_dispatch(_parser: Any, _args: Any) -> int:
+    return 0
 
 
 def _boom_dispatch(_parser: Any, _args: Any) -> None:

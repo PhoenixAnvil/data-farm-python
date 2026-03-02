@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from data_farm.models.models import TableInspection
+from data_farm.domain.model.models import TableInspection
 
 
 class RelationalInspector(Protocol):

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnEmitDefinition
 from data_farm.emitters.sql import SqlEmitter
-from data_farm.models.models import ColumnEmitDefinition
-from data_farm.utils.enums import SqlType
 
 
 def test_sql_emitter_renders_insert_statement() -> None:

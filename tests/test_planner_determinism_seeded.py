@@ -2,21 +2,19 @@ from __future__ import annotations
 
 import random
 
-from data_farm.models.models import ColumnInspection, PatternSuggestion
-from data_farm.patterns.registry import PatternRegistry
-from data_farm.planners.context import PlanContext
-from data_farm.planners.string_planner import StringPlanner
+from data_farm.application.context import PlanContext
+from data_farm.domain.model.models import ColumnInspection, PatternSuggestion
+from data_farm.domain.planners.string_planner import StringPlanner
+from data_farm.domain.ports.pattern_source import PatternSource
 
 
-def test_string_planner_is_repeatable_given_seed(
-    col_first_name: ColumnInspection, pattern_registry: PatternRegistry
-) -> None:
+def test_string_planner_is_repeatable_given_seed(col_first_name: ColumnInspection, pattern_source: PatternSource) -> None:
     suggestion = PatternSuggestion(
         strategy="string", pattern_id="first_names", confidence=1.0, reason="t", suggestor="t", priority=0
     )
 
-    ctx1 = PlanContext(rng=random.Random(123), patterns=pattern_registry, rows_per_table=3)
-    ctx2 = PlanContext(rng=random.Random(123), patterns=pattern_registry, rows_per_table=3)
+    ctx1 = PlanContext(rng=random.Random(123), patterns=pattern_source, rows_per_table=3)
+    ctx2 = PlanContext(rng=random.Random(123), patterns=pattern_source, rows_per_table=3)
 
     p = StringPlanner()
 

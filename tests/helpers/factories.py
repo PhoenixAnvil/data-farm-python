@@ -2,8 +2,8 @@ from collections.abc import Callable
 
 import pytest
 
-from data_farm.models.models import ColumnInspection, NormalizedColumnType
-from data_farm.utils.enums import SqlType
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType
 
 
 @pytest.fixture

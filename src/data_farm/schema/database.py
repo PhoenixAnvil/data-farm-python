@@ -7,8 +7,9 @@ from sqlalchemy.engine import Connection, Engine
 from sqlalchemy.engine.interfaces import ReflectedColumn
 from sqlalchemy.engine.reflection import Inspector as SAInspector
 
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType, TableInspection
 from data_farm.messages.messages import msg
-from data_farm.models.models import ColumnInspection, NormalizedColumnType, TableInspection
 from data_farm.schema.base import Inspector
 from data_farm.utils.database import (
     connect,
@@ -16,7 +17,6 @@ from data_farm.utils.database import (
     disconnect,
     dispose_engine,
 )
-from data_farm.utils.enums import SqlType
 
 
 class DatabaseInspector(Inspector):

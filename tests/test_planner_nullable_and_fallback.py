@@ -5,18 +5,18 @@ from pathlib import Path
 
 import pytest
 
-from data_farm.models.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
-from data_farm.patterns.registry import PatternRegistry
-from data_farm.planners.context import PlanContext
-from data_farm.planners.string_planner import StringPlanner
-from data_farm.utils.enums import SqlType
+from data_farm.application.context import PlanContext
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
+from data_farm.domain.planners.string_planner import StringPlanner
+from data_farm.infrastructure.patterns.filesystem_pattern_source import FilesystemPatternSource
 
 
 def test_string_planner_raises_when_pattern_file_empty(tmp_path: Path, rng_seeded: random.Random) -> None:
     d = tmp_path / "patterns"
     d.mkdir()
     (d / "empty.pat").write_text("# only comments\n\n", encoding="utf-8")
-    reg = PatternRegistry(patterns_dir=d)
+    reg = FilesystemPatternSource(patterns_dir=d)
     ctx = PlanContext(rng=rng_seeded, patterns=reg, rows_per_table=3)
 
     col = ColumnInspection(

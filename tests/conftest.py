@@ -2,15 +2,37 @@ from __future__ import annotations
 
 import logging
 import random
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
 
-from data_farm.models.models import ColumnInspection, NormalizedColumnType
-from data_farm.patterns.registry import PatternRegistry
-from data_farm.planners.context import PlanContext
-from data_farm.utils.enums import SqlType
+from data_farm.application.context import PlanContext
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType
+from data_farm.domain.ports.pattern_source import PatternSource
+
+
+@dataclass(frozen=True)
+class FakePatternSource(PatternSource):
+    choices_by_id: Mapping[str, Sequence[str]]
+
+    def get_choices(self, pattern_name: str) -> list[str]:
+        return list(self.choices_by_id.get(pattern_name, []))
+
+    def _load_pattern_file(self, key: str) -> list[str]:
+        return ["Bob", "Alice", "Frank"]
+
+    def exists(self, pattern_name: str) -> bool:
+        return True
+
+    def _pattern_path(self, key: str) -> Path:
+        return Path(f"/fake/path/{key}.pat")
+
+    @staticmethod
+    def _norm_key(name: str) -> str:
+        return name.lower().replace(" ", "_")
 
 
 @pytest.fixture()
@@ -30,13 +52,19 @@ def patterns_dir(tmp_path: Path) -> Path:
 
 
 @pytest.fixture()
-def pattern_registry(patterns_dir: Path) -> PatternRegistry:
-    return PatternRegistry(patterns_dir=patterns_dir)
+def pattern_source() -> PatternSource:
+    return FakePatternSource(
+        choices_by_id={
+            "first_names": ["Alice", "Bob", "Charlie"],
+            "email": ["a@example.com", "b@example.com"],
+            "status": ["NEW", "OPEN", "CLOSED"],
+        }
+    )
 
 
 @pytest.fixture()
-def plan_context(rng_seeded: random.Random, pattern_registry: PatternRegistry) -> PlanContext:
-    return PlanContext(rng=rng_seeded, patterns=pattern_registry, rows_per_table=3)
+def plan_context(rng_seeded: random.Random, pattern_source: PatternSource) -> PlanContext:
+    return PlanContext(rng=rng_seeded, patterns=pattern_source, rows_per_table=3)
 
 
 @pytest.fixture()

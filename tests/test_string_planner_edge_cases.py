@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from data_farm.models.models import ColumnInspection, PatternSuggestion
-from data_farm.planners.context import PlanContext
-from data_farm.planners.string_planner import StringPlanner
-from data_farm.utils.enums import SqlType
+from data_farm.application.context import PlanContext
+from data_farm.domain.enums import SqlType
+from data_farm.domain.model.models import ColumnInspection, PatternSuggestion
+from data_farm.domain.planners.string_planner import StringPlanner
 
 
 def test_string_planner_falls_back_when_pattern_missing(
