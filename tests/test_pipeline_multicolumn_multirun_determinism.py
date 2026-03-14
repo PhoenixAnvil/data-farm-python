@@ -3,12 +3,12 @@ from __future__ import annotations
 import random
 from pathlib import Path
 
-from data_farm.application.context import PlanContext
-from data_farm.domain.enums import SqlType
-from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
-from data_farm.domain.planners.registry import PlannerRegistry
 from data_farm.emitters.sql import SqlEmitter
-from data_farm.infrastructure.patterns.filesystem_pattern_source import FilesystemPatternSource
+from data_farm.l0_domain.enums import SqlType
+from data_farm.l0_domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
+from data_farm.l0_domain.planners.registry import PlannerRegistry
+from data_farm.l1_application.plan.context import PlanContext
+from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source import FilesystemPatternSource
 
 
 # ruff: noqa: PLR0915

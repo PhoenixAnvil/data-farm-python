@@ -5,7 +5,7 @@ import logging
 from contextlib import suppress
 from pathlib import Path
 
-from data_farm.app.logging_config import LOGGER_NAME, setup_logging
+from data_farm.l2_interface_adapters.logging.logging_config import LOGGER_NAME, setup_logging
 
 
 def _flush_close(logger: logging.Logger) -> None:

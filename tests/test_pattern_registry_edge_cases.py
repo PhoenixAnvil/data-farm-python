@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from data_farm.infrastructure.patterns.filesystem_pattern_source import FilesystemPatternSource
+from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source import FilesystemPatternSource
 
 
 def test_pattern_registry_ignores_blank_and_comment_lines(tmp_path: Path) -> None:

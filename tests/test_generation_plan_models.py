@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from data_farm.domain.model.models import PatternSuggestion
-from data_farm.domain.planners.generation_plan import GenerationPlan
-from data_farm.domain.planners.string_planner import StringPlanner
+from data_farm.l0_domain.model.models import PatternSuggestion
+from data_farm.l0_domain.planners.generation_plan import GenerationPlan
+from data_farm.l0_domain.planners.string_planner import StringPlanner
 
 
 def test_generation_plan_accepts_tables() -> None:

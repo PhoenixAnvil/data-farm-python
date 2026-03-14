@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from data_farm.app.logging_config import CsvFormatter, HeaderRotatingFileHandler
+from data_farm.l2_interface_adapters.logging.logging_config import CsvFormatter, HeaderRotatingFileHandler
 
 
 # ruff: noqa: PLR0915

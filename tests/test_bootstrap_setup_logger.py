@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pytest import MonkeyPatch
 
-from data_farm.application.bootstrap import setup_logger
+from data_farm.l3_frameworks_and_drivers.bootstrap import setup_logger
 
 
 def test_setup_logger_dot_creates_log_in_cwd(monkeypatch: MonkeyPatch, tmp_path: Path) -> None:

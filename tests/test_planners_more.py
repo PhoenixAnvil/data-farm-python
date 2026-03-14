@@ -4,14 +4,14 @@ import random
 from datetime import datetime
 from pathlib import Path
 
-from data_farm.application.context import PlanContext
-from data_farm.domain.enums import SqlType
-from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
-from data_farm.domain.planners.boolean_planner import BooleanPlanner
-from data_farm.domain.planners.datetime_planner import DateTimePlanner
-from data_farm.domain.planners.int_planner import IntPlanner
-from data_farm.domain.planners.uuid_planner import UUIDPlanner
-from data_farm.infrastructure.patterns.filesystem_pattern_source import FilesystemPatternSource
+from data_farm.l0_domain.enums import SqlType
+from data_farm.l0_domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
+from data_farm.l0_domain.planners.boolean_planner import BooleanPlanner
+from data_farm.l0_domain.planners.datetime_planner import DateTimePlanner
+from data_farm.l0_domain.planners.int_planner import IntPlanner
+from data_farm.l0_domain.planners.uuid_planner import UUIDPlanner
+from data_farm.l1_application.plan.context import PlanContext
+from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source import FilesystemPatternSource
 
 
 def _ctx(tmp_path: Path) -> PlanContext:

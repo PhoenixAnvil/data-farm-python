@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from data_farm.domain.enums import SqlType
-from data_farm.domain.model.models import ColumnEmitDefinition
 from data_farm.emitters.sql import SqlEmitter
+from data_farm.l0_domain.enums import SqlType
+from data_farm.l0_domain.model.models import ColumnEmitDefinition
 
 
 def test_emitter_renders_null_without_quotes() -> None:

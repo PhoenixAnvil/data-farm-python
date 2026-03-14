@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import random
 
-from data_farm.domain.generators.text import TextGenerator
 from data_farm.field.text import TextFieldDefinition
+from data_farm.l0_domain.generators.text import TextGenerator
 
 
 def test_text_generator_filters_choices_by_length() -> None:

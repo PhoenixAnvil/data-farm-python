@@ -3,7 +3,7 @@ from __future__ import annotations
 import io
 import logging
 
-from data_farm.logging.logging import IndentFormatter, log_depth
+from data_farm.l2_interface_adapters.logging.logging import IndentFormatter, log_depth
 
 
 # ruff: noqa: PLR0915

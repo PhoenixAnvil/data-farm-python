@@ -8,10 +8,10 @@ from pathlib import Path
 
 import pytest
 
-from data_farm.application.context import PlanContext
-from data_farm.domain.enums import SqlType
-from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType
-from data_farm.domain.ports.pattern_source import PatternSource
+from data_farm.l0_domain.enums import SqlType
+from data_farm.l0_domain.model.models import ColumnInspection, NormalizedColumnType
+from data_farm.l0_domain.ports.pattern_source import PatternSource
+from data_farm.l1_application.plan.context import PlanContext
 
 
 @dataclass(frozen=True)

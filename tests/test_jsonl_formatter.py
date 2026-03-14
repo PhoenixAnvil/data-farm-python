@@ -5,7 +5,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from data_farm.logging.logging import JsonlFormatter
+from data_farm.l2_interface_adapters.logging.logging import JsonlFormatter
 
 
 # ruff: noqa: PLR0915

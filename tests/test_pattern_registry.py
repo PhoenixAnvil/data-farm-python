@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from data_farm.infrastructure.patterns.filesystem_pattern_source import FilesystemPatternSource
+from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source import FilesystemPatternSource
 
 
 def test_pattern_registry_get_choices_loads_and_normalizes(patterns_dir: Path) -> None:

@@ -3,7 +3,7 @@ from __future__ import annotations
 import io
 import logging
 
-from data_farm.logging.logging import untimed
+from data_farm.l1_application.observability import untimed
 
 
 # ruff: noqa: PLR0915

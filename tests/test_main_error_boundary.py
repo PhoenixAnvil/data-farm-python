@@ -5,7 +5,7 @@ from typing import Any
 
 from pytest import MonkeyPatch
 
-import data_farm.cli.main as df_main
+import data_farm.l3_frameworks_and_drivers.cli.main as df_main
 
 
 @dataclass
