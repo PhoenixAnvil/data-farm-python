@@ -4,8 +4,8 @@ import logging
 from contextlib import suppress
 from pathlib import Path
 
-from data_farm.app.logging_config import LOGGER_NAME, setup_logging
-from data_farm.logging.logging import log_depth, timed, untimed
+from data_farm.l1_application.observability import log_depth, timed, untimed
+from data_farm.l2_interface_adapters.logging.logging_config import LOGGER_NAME, setup_logging
 
 
 def test_timed_increments_and_restores_depth(tmp_path: Path, dfarm_logger: logging.Logger) -> None:

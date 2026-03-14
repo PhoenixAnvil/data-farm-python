@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from data_farm.domain.model.models import ColumnInspection, PatternSuggestion
-from data_farm.domain.suggestors.defaults import build_default_registry
-from data_farm.domain.suggestors.engine import suggest_for_column
+from data_farm.l0_domain.model.models import ColumnInspection, PatternSuggestion
+from data_farm.l0_domain.suggestors.defaults import build_default_registry
+from data_farm.l0_domain.suggestors.engine import suggest_for_column
 
 
 def test_suggest_for_column_selects_first_name(col_first_name: ColumnInspection) -> None:

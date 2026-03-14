@@ -61,7 +61,7 @@ dev = [
 ]
 
 [project.scripts]
-dfarm = "data_farm.cli.main:main"
+dfarm = "data_farm.l3_frameworks_and_drivers.cli.main:main"
 
 [tool.black]
 line-length = 125

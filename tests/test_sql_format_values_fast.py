@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from data_farm.domain.enums import SqlType
 from data_farm.emitters.sql import format_values_fast, get_formatter
+from data_farm.l0_domain.enums import SqlType
 
 
 def test_format_values_fast_formats_using_parallel_formatters() -> None:

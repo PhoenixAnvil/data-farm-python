@@ -4,9 +4,9 @@ import argparse
 
 import pytest
 
-from data_farm.cli.app_parser import build_app_parser
-from data_farm.cli.inspect_parser import build_inspect_parser
-from data_farm.cli.project_parser import build_project_parser
+from data_farm.l3_frameworks_and_drivers.cli.app_parser import build_app_parser
+from data_farm.l3_frameworks_and_drivers.cli.inspect_parser import build_inspect_parser
+from data_farm.l3_frameworks_and_drivers.cli.project_parser import build_project_parser
 
 
 @pytest.mark.parametrize(

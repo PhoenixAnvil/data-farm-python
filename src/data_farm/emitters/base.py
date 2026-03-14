@@ -9,7 +9,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
 
-from data_farm.domain.model.models import ColumnEmitDefinition
+from data_farm.l0_domain.model.models import ColumnEmitDefinition
 
 
 class Emitter(ABC):

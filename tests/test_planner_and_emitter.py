@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from data_farm.application.context import PlanContext
-from data_farm.domain.enums import SqlType
-from data_farm.domain.model.models import ColumnEmitDefinition, ColumnInspection, PatternSuggestion
-from data_farm.domain.planners.string_planner import StringPlanner
 from data_farm.emitters.sql import SqlEmitter
+from data_farm.l0_domain.enums import SqlType
+from data_farm.l0_domain.model.models import ColumnEmitDefinition, ColumnInspection, PatternSuggestion
+from data_farm.l0_domain.planners.string_planner import StringPlanner
+from data_farm.l1_application.plan.context import PlanContext
 
 
 def test_string_planner_uses_pattern_id_when_present(plan_context: PlanContext, col_first_name: ColumnInspection) -> None:

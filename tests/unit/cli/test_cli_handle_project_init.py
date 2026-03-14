@@ -2,38 +2,36 @@ from __future__ import annotations
 
 import copy
 import random
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from data_farm.cli.base import AppContext, ProjectNamespace
-from data_farm.cli.handle_project import ProjectDeps, handle_project
+from data_farm.l1_application.commands.project_command import ProjectCommand
+from data_farm.l1_application.context import AppContext
+from data_farm.l1_application.use_cases.project_use_case import run_project
+from data_farm.l2_interface_adapters.config.default_data_source_config_loader import (
+    DefaultDataSourceConfigLoader,
+)
+from data_farm.l2_interface_adapters.factories.default_inspector_factory import (
+    DefaultInspectorFactory,
+)
+from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source_factory import (
+    FilesystemPatternSourceFactory,
+)
+from data_farm.l2_interface_adapters.project.default_project_initializer import (
+    DefaultProjectInitializer,
+)
+from data_farm.l2_interface_adapters.project.default_project_settings_store import (
+    DefaultProjectSettingsStore,
+)
 
 
-@dataclass
-class FakeProjectNs:
-    command: str = "project"
-    projects_root: str | None = None
-    init: str | None = None
-
-
-def test_handle_project_init_creates_structure(tmp_path: Path) -> None:
-    # Arrange
+def test_run_project_init_creates_structure(tmp_path: Path) -> None:
     app_config_path = tmp_path / "app.toml"
     projects_root = tmp_path / "projects"
 
-    def load(_path: Path) -> dict[str, Any]:
-        return {"project": {"projects_root": str(projects_root)}}
-
-    def store(_path: Path, _data: dict[str, Any]) -> None:
-        return
-
-    deps = ProjectDeps(
-        load_config=load,
-        store_config=store,
-        default_projects_root=lambda: tmp_path / "default-projects",
-        cwd=lambda: tmp_path,
-    )
+    with app_config_path.open("a", encoding="utf-8") as f:
+        f.write("[project]\n")
+        f.write(f"projects_root = '{projects_root}'\n")
 
     ctx = AppContext(
         config_dir=str(tmp_path / "cfg"),
@@ -46,14 +44,17 @@ def test_handle_project_init_creates_structure(tmp_path: Path) -> None:
         max_generation=100,
         log_file="",
         debug=False,
+        pattern_source_factory=FilesystemPatternSourceFactory(),
+        inspector_factory=DefaultInspectorFactory(),
+        data_source_config_loader=DefaultDataSourceConfigLoader(),
+        project_initializer=DefaultProjectInitializer(),
+        project_settings_store=DefaultProjectSettingsStore(),
     )
 
-    ns: ProjectNamespace = FakeProjectNs(init="my_proj")
+    cmd = ProjectCommand(init="my_proj")
 
-    # Act
-    handle_project(ctx, ns, deps=deps)
+    run_project(ctx, cmd)
 
-    # Assert
     proj_dir = projects_root / "my_proj"
     assert (proj_dir / "patterns").is_dir()
     assert (proj_dir / "output").is_dir()
@@ -61,25 +62,17 @@ def test_handle_project_init_creates_structure(tmp_path: Path) -> None:
     assert (proj_dir / "data_source_config.toml").is_file()
 
 
-def test_handle_project_projects_root_writes_projects_root_when_ns_projects_root_set(tmp_path: Path) -> None:
+def test_run_project_projects_root_writes_projects_root_when_cmd_projects_root_set(
+    tmp_path: Path,
+) -> None:
     app_config_path = tmp_path / "app.toml"
 
-    # in-memory persisted config
     saved: dict[str, Any] = {}
 
-    def load(_path: Path) -> dict[str, Any] | None:
-        return saved or None
-
-    def store(_path: Path, data: dict[str, Any]) -> None:
-        saved.clear()
-        saved.update(data)
-
-    deps = ProjectDeps(
-        load_config=load,
-        store_config=store,
-        default_projects_root=lambda: tmp_path / "default-projects",
-        cwd=lambda: tmp_path,
-    )
+    class FakeProjectSettingsStore(DefaultProjectSettingsStore):
+        def set_projects_root(self, config_path: Path, projects_root: str) -> None:
+            saved.clear()
+            saved.update({"project": {"projects_root": projects_root}})
 
     ctx = AppContext(
         config_dir=str(tmp_path / "cfg"),
@@ -92,37 +85,36 @@ def test_handle_project_projects_root_writes_projects_root_when_ns_projects_root
         max_generation=100,
         log_file="",
         debug=False,
+        pattern_source_factory=FilesystemPatternSourceFactory(),
+        inspector_factory=DefaultInspectorFactory(),
+        data_source_config_loader=DefaultDataSourceConfigLoader(),
+        project_initializer=DefaultProjectInitializer(),
+        project_settings_store=FakeProjectSettingsStore(),
     )
 
-    ns: ProjectNamespace = FakeProjectNs(projects_root=str(tmp_path / "projects"), init=None)
+    cmd = ProjectCommand(projects_root=str(tmp_path / "projects"))
 
-    handle_project(ctx, ns, deps=deps)
+    run_project(ctx, cmd)
 
     assert saved["project"]["projects_root"] == str(tmp_path / "projects")
 
 
-def test_handle_project_projects_root_preserves_existing_config_keys_when_writing_projects_root(tmp_path: Path) -> None:
+def test_run_project_projects_root_preserves_existing_config_keys_when_writing_projects_root(
+    tmp_path: Path,
+) -> None:
     app_config_path = tmp_path / "app.toml"
 
-    # in-memory persisted config
     saved: dict[str, Any] = {
         "test": "not removed",
         "project": {"test": "not removed"},
     }
 
-    def load(_path: Path) -> dict[str, Any] | None:
-        return copy.deepcopy(saved)
-
-    def store(_path: Path, data: dict[str, Any]) -> None:
-        saved.clear()
-        saved.update(data)
-
-    deps = ProjectDeps(
-        load_config=load,
-        store_config=store,
-        default_projects_root=lambda: tmp_path / "default-projects",
-        cwd=lambda: tmp_path,
-    )
+    class FakeProjectSettingsStore(DefaultProjectSettingsStore):
+        def set_projects_root(self, config_path: Path, projects_root: str) -> None:
+            current = copy.deepcopy(saved)
+            current.setdefault("project", {})["projects_root"] = projects_root
+            saved.clear()
+            saved.update(current)
 
     ctx = AppContext(
         config_dir=str(tmp_path / "cfg"),
@@ -135,11 +127,16 @@ def test_handle_project_projects_root_preserves_existing_config_keys_when_writin
         max_generation=100,
         log_file="",
         debug=False,
+        pattern_source_factory=FilesystemPatternSourceFactory(),
+        inspector_factory=DefaultInspectorFactory(),
+        data_source_config_loader=DefaultDataSourceConfigLoader(),
+        project_initializer=DefaultProjectInitializer(),
+        project_settings_store=FakeProjectSettingsStore(),
     )
 
-    ns: ProjectNamespace = FakeProjectNs(projects_root=str(tmp_path / "projects"), init=None)
+    cmd = ProjectCommand(projects_root=str(tmp_path / "projects"))
 
-    handle_project(ctx, ns, deps=deps)
+    run_project(ctx, cmd)
 
     assert saved["test"] == "not removed"
     assert saved["project"]["test"] == "not removed"

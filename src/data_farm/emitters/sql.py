@@ -9,9 +9,9 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable
 from typing import Any
 
-from data_farm.domain.enums import SqlType
-from data_farm.domain.model.models import ColumnEmitDefinition
 from data_farm.emitters.base import Emitter
+from data_farm.l0_domain.enums import SqlType
+from data_farm.l0_domain.model.models import ColumnEmitDefinition
 
 
 def _quote_sql_string(value: str) -> str:

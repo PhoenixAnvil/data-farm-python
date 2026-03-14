@@ -5,11 +5,11 @@ from pathlib import Path
 
 import pytest
 
-from data_farm.application.context import PlanContext
-from data_farm.domain.enums import SqlType
-from data_farm.domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
-from data_farm.domain.planners.string_planner import StringPlanner
-from data_farm.infrastructure.patterns.filesystem_pattern_source import FilesystemPatternSource
+from data_farm.l0_domain.enums import SqlType
+from data_farm.l0_domain.model.models import ColumnInspection, NormalizedColumnType, PatternSuggestion
+from data_farm.l0_domain.planners.string_planner import StringPlanner
+from data_farm.l1_application.plan.context import PlanContext
+from data_farm.l2_interface_adapters.patterns.filesystem_pattern_source import FilesystemPatternSource
 
 
 def test_string_planner_raises_when_pattern_file_empty(tmp_path: Path, rng_seeded: random.Random) -> None:
